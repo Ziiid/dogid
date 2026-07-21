@@ -1,0 +1,139 @@
+.mugshot-card {
+  width: min(92vw, 380px);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow:
+    0 22px 34px -18px rgba(0, 0, 0, 0.45),
+    0 6px 14px -6px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+}
+
+.mugshot-backdrop {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: linear-gradient(180deg, #e4e4e2 0%, #d2d2d0 55%, #c6c6c4 100%);
+  overflow: hidden;
+}
+
+.mugshot-ruler-lines {
+  position: absolute;
+  inset: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(30, 30, 30, 0.4) 0,
+    rgba(30, 30, 30, 0.4) 1px,
+    transparent 1px,
+    transparent 12.5%
+  );
+}
+
+.mugshot-scale {
+  position: absolute;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.5rem;
+  font-weight: 700;
+  color: #3a3a3a;
+}
+
+.mugshot-scale--left {
+  left: 0.35rem;
+}
+
+.mugshot-scale--right {
+  right: 0.35rem;
+}
+
+.mugshot-photo {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
+}
+
+.mugshot-photo-placeholder {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+}
+
+.mugshot-placard {
+  background: #17181a;
+  color: #f4f4f2;
+  padding: 0.55rem 0.75rem 0.65rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.mugshot-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.28rem 0;
+  border-bottom: 1px solid rgba(244, 244, 242, 0.18);
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.02em;
+}
+
+.mugshot-row--head {
+  color: #b8b8b4;
+  font-size: 0.58rem;
+}
+
+.mugshot-row--id .mugshot-row-value {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.mugshot-row-label {
+  color: #9a9a96;
+  margin-right: 0.25rem;
+}
+
+.mugshot-row--charge {
+  border-bottom: none;
+  padding-bottom: 0.1rem;
+}
+
+.mugshot-charge-input {
+  flex: 1;
+  min-width: 0;
+  margin-left: 0.4rem;
+  background: transparent;
+  border: none;
+  border-bottom: 1px dashed rgba(244, 244, 242, 0.4);
+  color: #f4f4f2;
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-style: italic;
+  text-align: right;
+  padding: 0.1rem 0;
+}
+
+.mugshot-charge-input:focus {
+  outline: none;
+  border-bottom-color: #6aab8a;
+}
+
+.mugshot-charge-input::placeholder {
+  color: #6b6b68;
+}
+
+.mugshot-dept {
+  margin-top: 0.4rem;
+  text-align: center;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  color: #8a8a86;
+  text-transform: uppercase;
+}

@@ -1,0 +1,46 @@
+.card-view {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.5rem 1rem 3rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.template-tabs {
+  display: flex;
+  gap: 0.4rem;
+  background: #edf7f1;
+  border-radius: 999px;
+  padding: 0.25rem;
+}
+
+.template-tabs button {
+  border: none;
+  background: transparent;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #2d5a3d;
+  cursor: pointer;
+}
+
+.template-tabs button.active {
+  background: #6aab8a;
+  color: #faf9f7;
+}
+
+.template-stage {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.card-empty {
+  color: #8a7f74;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 2rem 1rem;
+}
