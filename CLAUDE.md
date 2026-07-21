@@ -16,6 +16,7 @@ En extremt enkel engångsköpsapp: användaren fyller i ett formulär om sin hun
 - **QR-koden (om den finns kvar i designen) ska inte länka till en dynamisk webbsida** — det skulle kräva hosting/backend, vilket bryter mot "ingen backend"-principen. Om QR behålls: koda in kontaktinfo direkt som text/vCard, inte en URL.
 - **GDPR är i praktiken inte tillämpligt** eftersom ingen data lämnar enheten — men Apple kräver ändå en Privacy Policy-URL och ifylld "nutrition label" (sannolikt "Data Not Collected" på allt) även för appar utan datainsamling.
 - Möjlig PDF/kort-överlappning med dogish finns (dogish har en Premium-låst PDF-export med foderlogg/viktkurva/vaccinationsstatus), men den delen bygger på pågående loggad data som Dog ID aldrig kommer ha utan backend — bedömd risk för kannibalisering av Premium-uppgraderingar är låg.
+- **Flera visuella mallar ("framing") av samma kort**, valbara av användaren: t.ex. "seriöst ID", "körkort" och en skämtsam "Mugshot" (med redigerbar rolig text, t.ex. "Guilty as charged - for being cute"). Detta är ren reskin av samma datamodell/fält — inga nya funktioner eller card-typer — så det bryter inte mot "bygg bara ett kort"-principen. Håll det till 2-3 mallar för v1, annars blir designarbetet (varje mall är ett eget layoutjobb) den nya flaskhalsen. Mugshot-varianten bedöms som den mest virala/delningsbenägna, medan ID-kortet bär det seriösa säljargumentet i App Store.
 
 ## Vanor att ta med från dogish-arbetet
 
