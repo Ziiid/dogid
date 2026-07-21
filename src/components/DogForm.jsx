@@ -40,16 +40,13 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       })
 
       let base64 = photo.base64String
-      console.log('[DogID] isNativePlatform:', Capacitor.isNativePlatform())
       if (Capacitor.isNativePlatform()) {
         setProcessingPhoto(true)
         try {
-          console.log('[DogID] calling BackgroundRemoval.removeBackground')
           const result = await BackgroundRemoval.removeBackground({ base64 })
-          console.log('[DogID] removeBackground resolved, removed:', result.removed)
           base64 = result.base64
-        } catch (err) {
-          console.error('[DogID] removeBackground failed:', err)
+        } catch {
+          // Fortsätt med originalbilden om bakgrundsborttagningen misslyckas
         } finally {
           setProcessingPhoto(false)
         }
