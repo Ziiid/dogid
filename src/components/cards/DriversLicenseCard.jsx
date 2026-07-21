@@ -1,9 +1,12 @@
 import { formatDate, genderCode } from '../../lib/format.js'
+import { useLanguage } from '../../lib/i18n.jsx'
 import PawIcon from './PawIcon.jsx'
 import './DriversLicenseCard.css'
 
 function DriversLicenseCard({ dog, photoUri }) {
+  const { lang, t } = useLanguage()
   const microtext = `${dog.chipNumber || dog.name}  `.repeat(6)
+  const titleSub = t('licenseTitleSub')
 
   return (
     <div className="license-card">
@@ -25,7 +28,8 @@ function DriversLicenseCard({ dog, photoUri }) {
 
         <div className="license-title-block">
           <span className="license-title">
-            KÖRKORT <span className="license-title-sub">DRIVING LICENCE</span>
+            {t('licenseTitle')}
+            {titleSub && <span className="license-title-sub">{titleSub}</span>}
           </span>
         </div>
 
@@ -47,13 +51,13 @@ function DriversLicenseCard({ dog, photoUri }) {
         </div>
         <div className="license-field">
           <span className="num">4a.</span>
-          <span className="value">Alltid</span>
+          <span className="value">{t('licenseAlways')}</span>
           <span className="num">4b.</span>
-          <span className="value">Hela livet</span>
+          <span className="value">{t('licenseForLife')}</span>
         </div>
         <div className="license-field">
           <span className="num">4c.</span>
-          <span className="value">Dogish Kennelregister</span>
+          <span className="value">{t('licenseKennelRegister')}</span>
         </div>
         <div className="license-field">
           <span className="num">5.</span>
@@ -86,7 +90,7 @@ function DriversLicenseCard({ dog, photoUri }) {
 
         <div className="license-class">
           <span className="num">9.</span>
-          <span className="value">{genderCode(dog.gender)}</span>
+          <span className="value">{genderCode(dog.gender, lang)}</span>
         </div>
       </div>
 

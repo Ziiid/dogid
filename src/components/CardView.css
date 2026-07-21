@@ -2,23 +2,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.25rem;
-  padding: 1.5rem 1rem 3rem;
+  gap: 1rem;
+  padding: 0.75rem 1rem 1.5rem;
   width: 100%;
   box-sizing: border-box;
 }
 
 .template-tabs {
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 0.4rem;
-  background: #edf7f1;
-  border-radius: 999px;
-  padding: 0.25rem;
+  max-width: 340px;
 }
 
 .template-tabs button {
-  border: none;
-  background: transparent;
+  border: 1px solid #c8dfd4;
+  background: #f2faf5;
   padding: 0.4rem 0.9rem;
   border-radius: 999px;
   font-size: 0.8rem;
@@ -29,6 +29,7 @@
 
 .template-tabs button.active {
   background: #6aab8a;
+  border-color: #6aab8a;
   color: #faf9f7;
 }
 
@@ -36,6 +37,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  zoom: 0.78;
 }
 
 .card-empty {

@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core'
 
 const PROFILE_KEY = 'dogid_dog_profile'
 const PHOTO_FILENAME = 'dogid_photo.png'
+const LANG_KEY = 'dogid_lang'
 
 export async function saveDogProfile(data) {
   await Preferences.set({ key: PROFILE_KEY, value: JSON.stringify(data) })
@@ -34,4 +35,13 @@ export async function loadPhotoUri() {
   } catch {
     return null
   }
+}
+
+export async function saveLang(lang) {
+  await Preferences.set({ key: LANG_KEY, value: lang })
+}
+
+export async function loadLang() {
+  const { value } = await Preferences.get({ key: LANG_KEY })
+  return value
 }

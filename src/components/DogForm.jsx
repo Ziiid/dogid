@@ -3,6 +3,7 @@ import { Camera, CameraResultType, CameraSource } from '@capacitor/camera'
 import { Capacitor } from '@capacitor/core'
 import { savePhoto } from '../lib/dogStorage.js'
 import BackgroundRemoval from '../lib/backgroundRemoval.js'
+import { useLanguage } from '../lib/i18n.jsx'
 import './DogForm.css'
 
 const EMPTY_DOG = {
@@ -21,6 +22,7 @@ const EMPTY_DOG = {
 }
 
 function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
+  const { t } = useLanguage()
   const [dog, setDog] = useState(initialDog ?? EMPTY_DOG)
   const [photoUri, setPhotoUri] = useState(initialPhotoUri ?? null)
   const [saving, setSaving] = useState(false)
@@ -79,16 +81,17 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
         disabled={processingPhoto}
       >
         {processingPhoto ? (
-          <span className="photo-placeholder">Tar bort bakgrund…</span>
+          <span className="photo-placeholder">{t('photoProcessing')}</span>
         ) : photoUri ? (
-          <img src={photoUri} alt="Hundens foto" />
+          <img src={photoUri} alt="" />
         ) : (
-          <span className="photo-placeholder">Lägg till foto</span>
+          <span className="photo-placeholder">{t('photoAdd')}</span>
         )}
       </button>
+      <p className="photo-hint">{t('photoHint')}</p>
 
       <label>
-        Namn *
+        {t('labelName')} *
         <input
           type="text"
           required
@@ -98,7 +101,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Ras
+        {t('labelBreed')}
         <input
           type="text"
           value={dog.breed}
@@ -108,7 +111,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
 
       <div className="row">
         <label>
-          Födelsedatum
+          {t('labelBirthDate')}
           <input
             type="date"
             value={dog.birthDate}
@@ -117,21 +120,21 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
         </label>
 
         <label>
-          Kön
+          {t('labelGender')}
           <select
             value={dog.gender}
             onChange={(e) => update('gender', e.target.value)}
           >
-            <option value="">Välj</option>
-            <option value="hane">Hane</option>
-            <option value="tik">Tik</option>
+            <option value="">{t('genderChoose')}</option>
+            <option value="hane">{t('genderMale')}</option>
+            <option value="tik">{t('genderFemale')}</option>
           </select>
         </label>
       </div>
 
       <div className="row">
         <label>
-          Färg
+          {t('labelColor')}
           <input
             type="text"
             value={dog.color}
@@ -140,7 +143,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
         </label>
 
         <label>
-          Päls
+          {t('labelCoat')}
           <input
             type="text"
             value={dog.coat}
@@ -150,7 +153,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </div>
 
       <label>
-        Kennel / uppfödare
+        {t('labelKennel')}
         <input
           type="text"
           value={dog.kennel}
@@ -159,7 +162,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Chipnummer
+        {t('labelChip')}
         <input
           type="text"
           inputMode="numeric"
@@ -169,7 +172,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Försäkring
+        {t('labelInsurance')}
         <input
           type="text"
           value={dog.insurance}
@@ -178,7 +181,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Veterinär
+        {t('labelVet')}
         <input
           type="text"
           value={dog.vet}
@@ -187,7 +190,7 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Allergier / medicinskt
+        {t('labelMedical')}
         <textarea
           rows={3}
           value={dog.medical}
@@ -196,17 +199,17 @@ function DogForm({ initialDog, initialPhotoUri, onSave, onPhotoChange }) {
       </label>
 
       <label>
-        Nödkontakt
+        {t('labelEmergency')}
         <input
           type="text"
-          placeholder="Namn och telefonnummer"
+          placeholder={t('emergencyPlaceholder')}
           value={dog.emergencyContact}
           onChange={(e) => update('emergencyContact', e.target.value)}
         />
       </label>
 
       <button type="submit" className="save-button" disabled={saving}>
-        {saving ? 'Sparar…' : 'Spara'}
+        {saving ? t('savingButton') : t('saveButton')}
       </button>
     </form>
   )

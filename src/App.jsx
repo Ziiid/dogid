@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react'
 import DogForm from './components/DogForm.jsx'
 import CardView from './components/CardView.jsx'
 import { loadDogProfile, loadPhotoUri, saveDogProfile } from './lib/dogStorage.js'
+import { useLanguage } from './lib/i18n.jsx'
 import './App.css'
 
 function App() {
+  const { lang, setLang, t } = useLanguage()
   const [dog, setDog] = useState(null)
   const [photoUri, setPhotoUri] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -34,8 +36,8 @@ function App() {
     setPhotoUri(uri)
   }
 
-  async function handleCaptionChange(caption) {
-    const updated = { ...dog, mugshotCaption: caption }
+  async function handleFieldChange(field, value) {
+    const updated = { ...dog, [field]: value }
     await saveDogProfile(updated)
     setDog(updated)
   }
@@ -47,6 +49,13 @@ function App() {
   return (
     <div className="app">
       <header className="app-header">
+        <button
+          type="button"
+          className="lang-toggle"
+          onClick={() => setLang(lang === 'sv' ? 'en' : 'sv')}
+        >
+          {lang === 'sv' ? 'EN' : 'SV'}
+        </button>
         <h1>Dog ID</h1>
         <p className="tagline">by Dogish</p>
       </header>
@@ -57,7 +66,7 @@ function App() {
           className={tab === 'form' ? 'active' : ''}
           onClick={() => setTab('form')}
         >
-          Formulär
+          {t('appTabForm')}
         </button>
         <button
           type="button"
@@ -65,7 +74,7 @@ function App() {
           onClick={() => setTab('card')}
           disabled={!dog?.name}
         >
-          Kort
+          {t('appTabCard')}
         </button>
       </nav>
 
@@ -77,10 +86,10 @@ function App() {
           onPhotoChange={handlePhotoChange}
         />
       ) : (
-        <CardView dog={dog} photoUri={photoUri} onCaptionChange={handleCaptionChange} />
+        <CardView dog={dog} photoUri={photoUri} onFieldChange={handleFieldChange} />
       )}
 
-      {savedMessage && <div className="saved-toast">Sparat!</div>}
+      {savedMessage && <div className="saved-toast">{t('appSaved')}</div>}
     </div>
   )
 }

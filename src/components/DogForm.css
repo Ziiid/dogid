@@ -37,6 +37,13 @@
   padding: 0 0.5rem;
 }
 
+.photo-hint {
+  margin: -0.5rem 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: #8a7f74;
+}
+
 .dog-form label {
   display: flex;
   flex-direction: column;

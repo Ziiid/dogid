@@ -19,13 +19,78 @@
 .mugshot-ruler-lines {
   position: absolute;
   inset: 0;
-  background-image: repeating-linear-gradient(
-    to bottom,
-    rgba(30, 30, 30, 0.4) 0,
-    rgba(30, 30, 30, 0.4) 1px,
-    transparent 1px,
-    transparent 12.5%
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(30, 30, 30, 0.4) 0,
+      rgba(30, 30, 30, 0.4) 1px,
+      transparent 1px,
+      transparent 12.5%
+    ),
+    url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNDAnIGhlaWdodD0nMTQwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nMC44NScgbnVtT2N0YXZlcz0nMicgc3RpdGNoVGlsZXM9J3N0aXRjaCcvPjxmZUNvbG9yTWF0cml4IHR5cGU9J21hdHJpeCcgdmFsdWVzPScwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwIDAgMCAwLjA2IDAnLz48L2ZpbHRlcj48cmVjdCB3aWR0aD0nMTAwJScgaGVpZ2h0PScxMDAlJyBmaWx0ZXI9J3VybCgjbiknLz48L3N2Zz4K');
+  background-size:
+    auto,
+    140px 140px;
+}
+
+.mugshot-vignette {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse at center 45%,
+    transparent 45%,
+    rgba(0, 0, 0, 0.35) 100%
   );
+}
+
+.mugshot-flash {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background: radial-gradient(
+    ellipse at center 30%,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0) 60%
+  );
+}
+
+.mugshot-stamp {
+  position: absolute;
+  top: 66%;
+  left: 50%;
+  z-index: 3;
+  transform: translate(-50%, -50%) rotate(-14deg);
+  padding: 0.4rem 1.6rem;
+  border: 0.3rem solid #b3261e;
+  border-radius: 6px;
+  color: #b3261e;
+  font-family: ui-monospace, Consolas, monospace;
+  font-weight: 800;
+  font-size: 3rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.82;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.mugshot-timestamp {
+  position: absolute;
+  top: 0.6rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 0.98rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #ff9d00;
+  text-shadow: 0 0 6px rgba(255, 157, 0, 0.75);
 }
 
 .mugshot-scale {
@@ -50,10 +115,15 @@
 }
 
 .mugshot-photo {
-  position: relative;
+  position: absolute;
   z-index: 1;
-  width: 100%;
-  height: 100%;
+  left: 50%;
+  bottom: 0;
+  transform: translateX(-50%);
+  max-width: 88%;
+  max-height: 72%;
+  width: auto;
+  height: auto;
   object-fit: contain;
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
 }
@@ -63,6 +133,15 @@
   z-index: 1;
   width: 100%;
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mugshot-photo-placeholder-icon {
+  width: 30%;
+  height: 30%;
+  color: rgba(30, 30, 30, 0.18);
 }
 
 .mugshot-placard {
@@ -101,22 +180,26 @@
 }
 
 .mugshot-row--charge {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.2rem;
   border-bottom: none;
   padding-bottom: 0.1rem;
 }
 
 .mugshot-charge-input {
-  flex: 1;
-  min-width: 0;
-  margin-left: 0.4rem;
+  width: 100%;
+  box-sizing: border-box;
+  resize: none;
   background: transparent;
   border: none;
   border-bottom: 1px dashed rgba(244, 244, 242, 0.4);
   color: #f4f4f2;
   font-family: inherit;
-  font-size: 0.68rem;
+  font-size: 1rem;
   font-style: italic;
-  text-align: right;
+  line-height: 1.3;
+  text-align: left;
   padding: 0.1rem 0;
 }
 
@@ -129,11 +212,3 @@
   color: #6b6b68;
 }
 
-.mugshot-dept {
-  margin-top: 0.4rem;
-  text-align: center;
-  font-size: 0.55rem;
-  letter-spacing: 0.08em;
-  color: #8a8a86;
-  text-transform: uppercase;
-}

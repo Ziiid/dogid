@@ -18,15 +18,15 @@ export function calcAge(isoDate) {
   return age
 }
 
-export function formatGender(gender) {
-  if (gender === 'hane') return 'Hane'
-  if (gender === 'tik') return 'Tik'
+export function formatGender(gender, lang = 'sv') {
+  if (gender === 'hane') return lang === 'en' ? 'Male' : 'Hane'
+  if (gender === 'tik') return lang === 'en' ? 'Female' : 'Tik'
   return '—'
 }
 
-export function genderCode(gender) {
-  if (gender === 'hane') return 'H'
-  if (gender === 'tik') return 'T'
+export function genderCode(gender, lang = 'sv') {
+  if (gender === 'hane') return lang === 'en' ? 'M' : 'H'
+  if (gender === 'tik') return lang === 'en' ? 'F' : 'T'
   return '—'
 }
 
