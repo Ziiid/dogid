@@ -17,6 +17,13 @@ En extremt enkel engångsköpsapp: användaren fyller i ett formulär om sin hun
 - **GDPR är i praktiken inte tillämpligt** eftersom ingen data lämnar enheten — men Apple kräver ändå en Privacy Policy-URL och ifylld "nutrition label" (sannolikt "Data Not Collected" på allt) även för appar utan datainsamling.
 - Möjlig PDF/kort-överlappning med dogish finns (dogish har en Premium-låst PDF-export med foderlogg/viktkurva/vaccinationsstatus), men den delen bygger på pågående loggad data som Dog ID aldrig kommer ha utan backend — bedömd risk för kannibalisering av Premium-uppgraderingar är låg.
 - **Flera visuella mallar ("framing") av samma kort**, valbara av användaren: t.ex. "seriöst ID", "körkort" och en skämtsam "Mugshot" (med redigerbar rolig text, t.ex. "Guilty as charged - for being cute"). Detta är ren reskin av samma datamodell/fält — inga nya funktioner eller card-typer — så det bryter inte mot "bygg bara ett kort"-principen. Håll det till 2-3 mallar för v1, annars blir designarbetet (varje mall är ett eget layoutjobb) den nya flaskhalsen. Mugshot-varianten bedöms som den mest virala/delningsbenägna, medan ID-kortet bär det seriösa säljargumentet i App Store.
+- **Använd samma färgpalett som dogish** för visuell varumärkeskoppling ("Dog ID by Dogish"). Dogish hex-koder (hårdkodade i `App.css`, inga CSS-variabler):
+  - Primär (salvia-grön): `#6aab8a`
+  - Sekundär/mörkare grön (rubriker/text): `#2d5a3d`
+  - Ljusgröna bakgrunder/borders: `#c8dfd4`, `#edf7f1`, `#d8ede4`, `#f2faf5`
+  - App-bakgrund (varmvit): `#faf9f7`
+  - Textfärger: `#2d2d2d` / `#1a1a1a` (mörk), `#8a7f74` / `#b0a89f` (dämpad)
+  - Fel/varning (röd): `#d9534f`, `#c0392b`, `#e05a5a`
 
 ## Vanor att ta med från dogish-arbetet
 
