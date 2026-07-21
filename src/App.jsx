@@ -3,6 +3,7 @@ import DogForm from './components/DogForm.jsx'
 import CardView from './components/CardView.jsx'
 import { loadDogProfile, loadPhotoUri, saveDogProfile } from './lib/dogStorage.js'
 import { useLanguage } from './lib/i18n.jsx'
+import logo from './assets/dogsona-logo.png'
 import './App.css'
 
 function App() {
@@ -48,7 +49,7 @@ function App() {
 
   return (
     <div className="app">
-      <header className="app-header">
+      <div className="lang-row">
         <button
           type="button"
           className="lang-toggle"
@@ -56,8 +57,16 @@ function App() {
         >
           {lang === 'sv' ? 'EN' : 'SV'}
         </button>
-        <h1>Dog ID</h1>
-        <p className="tagline">by Dogish</p>
+      </div>
+
+      <header className="app-header">
+        <div className="brand">
+          <img src={logo} alt="" className="brand-logo" />
+          <h1>
+            <span className="brand-dog">Dog</span>
+            <span className="brand-sona">sona</span>
+          </h1>
+        </div>
       </header>
 
       <nav className="main-tabs">

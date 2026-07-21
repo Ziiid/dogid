@@ -61,6 +61,14 @@ Första utkasten av Mugshot/Guard/Betyg hade skämtinstitutioner ("Central Bark 
 
 Genre-korrekt engelska (Mugshots "CHARGE"/"BOOKED", Guards "Chief of Security") hålls medvetet oöversatt oavsett språkläge — det är redan på engelska i originalet av genre-skäl, inte svensk text som råkat vara kvar.
 
+## Namnbyte till Dogsona (2026-07-21)
+
+**"Dog ID" → "Dogsona"**, ingen "by Dogish"-tagline. Anledning: användarens Instagram har redan "Dogish" som kontonamn med "by Doxtail" som undertext — att sätta "by Dogish" på en annan app hade krockat med det etablerade mönstret (Doxtail = avsändare/studio, Dogish = eget produktvarumärke). "Dogsona" (dog + persona) valdes istället, med risk noterad att ordet redan används i vissa community-kretsar för påhittade hund-avatarer (typ "fursona" för hundar) — bedömd som hanterbar med tydlig undertitel i App Store-listningen.
+
+Ändringar: `capacitor.config.json` (`appName`), `package.json` (`name`), `Info.plist` (`CFBundleDisplayName`), `index.html` (`<title>`), samt app-header i `App.jsx` (logga + tvåtons-wordmark "Dog" grönt / "sona" svart, ingen tagline). `appId` (`com.doxtail.dogid`) lämnades **oförändrad** — bundle-ID-byten är svåra att ångra (påverkar App Store Connect-registrering/provisioning) och inget uttryckligt beslut om det har tagits.
+
+App-ikon och splashscreen bygger på `dogsona.png` (ligger i repo-root) — kopierad till `AppIcon.appiconset` (1024×1024, ingen alfakanal) och till `Splash.imageset` (centrerad, rundade hörn, på appens varmvita bakgrund `#faf9f7`).
+
 ## Bygg-/synk-flöde (Capacitor)
 
 **`npx vite build` uppdaterar bara `dist/`, inte det Xcode faktiskt bygger**
