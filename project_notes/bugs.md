@@ -2,6 +2,16 @@
 
 ## Lösta (2026-07-21)
 
+**Kortmallsflikar utan `flex-wrap` gjorde att hela sidan (inklusive korten) zoomades ut**
+
+Symptom: efter att en femte/sjätte kortmall lades till (Barkinder, Betyg, Guard) upplevde användaren att alla kort blev mindre, trots att inget i själva kortkomponenterna ändrats.
+
+Orsak: `.template-tabs` i `CardView.css` hade `display: flex` utan `flex-wrap`, så flikraden blev bredare än viewporten när for många flikar radades upp i en enda rad. Bredare-än-viewport-innehåll tvingar iOS WKWebView att effektivt zooma ut hela sidan för att få plats, vilket krymper allt — inte bara flikarna.
+
+Fix: `flex-wrap: wrap` + `justify-content: center` + `max-width: 340px` på `.template-tabs`, så flikarna radbryter (max ~3-4 per rad) istället för att tvinga fram överbredd.
+
+**Lärdom:** om en till synes orelaterad ändring (fler flikar, mer text i en rad) verkar krympa hela layouten på en fysisk iPhone, misstänk overflow som tvingar fram viewport-omskalning — inte att varje enskild komponent plötsligt "blivit mindre".
+
 **Bakgrundsborttagning gav alltid `{"code":"UNIMPLEMENTED"}` — lång felsökningssaga**
 
 Symptom: JS-anropet till det native `BackgroundRemoval`-pluginet misslyckades alltid, trots att koden kompilerade rent (`xcodebuild` grönt) och plugin-klassen syntes i de kompilerade objektfilerna.

@@ -41,5 +41,27 @@ Både `MainViewController` (bara refererad via klassnamnssträng i storyboarden)
 **Tre mallar omdesignade utifrån verkliga referensbilder (2026-07-21)**
 Användaren skickade foton av ett kalifornienskt körkort, ett svenskt EU-körkort och ett mugshot-studiofoto. Mallarna byggdes om för att matcha dessa layoutkonventioner (säkerhetsmönster, numrerade fält, ljusgrå mugshot-bakgrund med höjdlinjer) istället för generiska platta kort — se `src/components/cards/`.
 
-**Ny inriktning under uppbyggnad: "Dog Card Generator"**
-Konceptet breddas mot säsongs-/helgmallar (jul, nyår, påsk, halloween, födelsedag eller sommar, mugshot) istället för enbart ID-dokument-pastischer. Se roadmap.md — inte påbörjat i kod ännu.
+**Humor-spår valt istället för säsongs-/helgmallar (2026-07-21)**
+Den tidigare "Dog Card Generator"-idén (jul, nyår, påsk, halloween, födelsedag/sommar) övervägdes men valdes bort till förmån för ett humor-/igenkänningsspår: kort byggs kring saker hundägare känner igen sig i (dejting-profil-parodi, skolbetyg, vaktrapport), inte säsongsteman. Användarens fru är skeptisk till att skämt-vinkeln alls kommer landa — beslutet togs ändå eftersom appen är prissatt lågt (~19–29 kr) som ett medvetet lågrisk-experiment, och ID-kortet/Körkortet bär det seriösa säljargumentet oavsett. Säsongsmallar kan återupptas senare om humor-spåret inte biter.
+
+**Tre nya kort byggda på samma mönster som Mugshot (2026-07-21): Barkinder, Betyg, Guard**
+- **Barkinder** (`DatingCard.jsx`) — dejting-profil-parodi (undvek namnet "Tinder" pga varumärkesrisk i en betald app). Fasta "dating app"-signaler (aktiv nu, gillande-räknare, match%) för genre-igenkänning, plus ett redigerbart bio-fält.
+- **Betyg** (`ReportCard.jsx`) — skolbetygsformulär med riktig svensk betygsskala (A–F, inte amerikansk plus/minus, för bättre igenkänning). Betyg per kategori växlas genom att trycka (cyklar A→F), plus ett fritt kommentarsfält i handstilsliknande font.
+- **Guard** (`GuardCard.jsx`) — vaktrapport/"säkerhetsbadge"-tema, marinblått med sköldformad emblem (`clip-path`) och egna ikoner (`HandcuffsIcon.jsx`, `BinocularsIcon.jsx`) för polis-känsla, plus en incidentlogg med (medvetet triviala) "hot" hunden vaktat mot.
+
+Alla tre delar samma mönster som Mugshot: en generisk `onFieldChange(field, value)`-callback i `App.jsx` sparar valfritt kort-specifikt fält (`datingBio`, `reportGrades`, `reportComment`, `guardNote`) på hundprofilen, ingen ny lagringsmekanism krävdes.
+
+**Undvek påhittade "Central Bark X"-institutionsnamn (2026-07-21)**
+Första utkasten av Mugshot/Guard/Betyg hade skämtinstitutioner ("Central Bark Department", "Bark Security", "Central Bark Academy"). Användaren tyckte det blev för corny — togs bort helt. Där ett kort behövde en "underskrift" (Betyg, Guard) visas istället hundens eget namn i signaturstil, inte ett påhittat företagsnamn.
+
+## Språkstöd (sv/en, 2026-07-21)
+
+**React Context istället för prop-drilling genom CardView → varje kort**
+`src/lib/i18n.jsx` exporterar en `LanguageProvider` (wrappar `<App>` i `main.jsx`) + `useLanguage()`-hook (`{ lang, setLang, t }`). Varje kortkomponent anropar `useLanguage()` direkt istället för att få `lang` som prop nerskickat genom `CardView` — enklare att lägga till fler kort senare utan att ändra prop-kedjan. Språkvalet sparas via `@capacitor/preferences` (`dogid_lang`) så det finns kvar mellan sessioner. Toggle-knapp (EN/SV) ligger uppe till höger i `app-header`.
+
+Genre-korrekt engelska (Mugshots "CHARGE"/"BOOKED", Guards "Chief of Security") hålls medvetet oöversatt oavsett språkläge — det är redan på engelska i originalet av genre-skäl, inte svensk text som råkat vara kvar.
+
+## Bygg-/synk-flöde (Capacitor)
+
+**`npx vite build` uppdaterar bara `dist/`, inte det Xcode faktiskt bygger**
+`ios/App/App/public/` (det Xcode paketerar) är en kopia som bara uppdateras av `npx cap copy ios` (eller `cap sync`). Lätt att glömma efter en `vite build` — orsakade förvirring en gång under sessionen (användaren såg inga av de nya CSS-ändringarna i appen). Rutin: kör alltid `vite build` + `cap copy ios` ihop, aldrig bara det förra, innan man ber användaren testa i Xcode.

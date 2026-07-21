@@ -7,8 +7,9 @@
 - **Plattform:** iOS-only just nu (ingen Android-plattform tillagd). Testas uteslutande via Xcode på fysisk iPhone, inte simulator eller webbläsare.
 - **Formulär:** klart — alla fält från CLAUDE.md-konceptet (namn, ras, födelsedatum, kön, färg, päls, kennel/uppfödare, chipnummer, försäkring, veterinär, allergier/medicinskt, nödkontakt, foto)
 - **Lagring:** `@capacitor/preferences` för formulärdata (JSON-blob), `@capacitor/filesystem` för hundfotot (`dogid_photo.png`, `Directory.Data`)
-- **Kortmallar:** tre klara — ID-kort (seriöst, kalifornien-DL-inspirerat), Körkort (svensk EU-körkort-stil), Mugshot (ljusgrå studiobakgrund + redigerbar "CHARGE:"-text). Väljs via flikar i `CardView.jsx`.
+- **Kortmallar:** sex klara — ID-kort (seriöst, kalifornien-DL-inspirerat), Körkort (svensk EU-körkort-stil), Mugshot (ljusgrå studiobakgrund + redigerbar "CHARGE:"-text), Barkinder (dejting-profil-parodi), Betyg (skolbetyg med svensk A–F-skala), Guard (vaktrapport/säkerhetsbadge-tema). Väljs via flikar (radbryter vid fler än ~3-4) i `CardView.jsx`.
 - **Bakgrundsborttagning:** klar och verifierad på fysisk enhet 2026-07-21 — Apples Vision-ramverk tar automatiskt bort bakgrunden från hundfoton vid uppladdning, med graceful fallback om det misslyckas.
+- **Språk:** svenska/engelska växlingsbart via en EN/SV-knapp i headern, sparas i Preferences (`dogid_lang`). Implementerat via React Context i `src/lib/i18n.jsx`, se decisions.md.
 
 ## Tech stack
 
