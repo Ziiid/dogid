@@ -37,3 +37,27 @@ Symptom: efter att ha valt ett nytt foto och sparat visade kortvyn fortfarande d
 Orsak: `App.jsx` villkorsrenderade `<DogForm>` vs `<CardView>` baserat på aktiv flik — `DogForm` avmonterades helt vid flikbyte, vilket kastade dess lokala `photoUri`-state. `App.jsx` uppdaterade dessutom aldrig sin egen `photoUri`-state efter första sidladdningen, så `CardView` fick alltid den gamla filsökvägen.
 
 Fix: lyfte fotouppdateringen upp till `App.jsx` via en ny `onPhotoChange`-callback som anropas direkt när `savePhoto()` slutförs i `DogForm`, inte bara vid formulärets "Spara"-knapp.
+
+---
+
+**Hundfotot saknades i den delade bilden (2026-07-22)**
+
+Symptom: dela-knappen fungerade och öppnade native delningsmenyn, men den exporterade bilden visade allt utom hundfotot — tomt där fotot skulle vara.
+
+Orsak: `html-to-image` försöker bädda in `<img>`-taggar genom att `fetch()`:a deras `src` under exporten. Hundfotots URL kommer från `Capacitor.convertFileSrc()` (ett `capacitor://.../_capacitor_file_/...`-specialschema för filer i `Directory.Data`/`Cache`) — den typen av URL verkar inte gå att `fetch()`:a på samma sätt som webviewen internt renderar `<img src>` med.
+
+Fix: `loadPhotoBase64()` (`dogStorage.js`) läser fotot direkt som base64 via `Filesystem.readFile`, och `CardView.jsx`s delningsfunktion byter tillfälligt ut alla matchande `<img>`-elements `src`-attribut till en `data:`-URL bara under `toPng()`-anropet, återställer sedan originalvärdet i en `finally`-blockering.
+
+**Lärdom:** bundlade statiska assets (CSS `background-image: url(...)` från `dist/assets/`) funkar fint med `html-to-image` eftersom de har vanliga same-origin-URL:er — det är specifikt Capacitors fil-URL-brygga (`_capacitor_file_`) som inte går att `fetch()`:a från JS, även om `<img>`-taggen visar bilden perfekt på skärmen.
+
+---
+
+**Vit skärm-krasch vid drag av stickers ovanpå fotot (2026-07-22)**
+
+Symptom: appen kraschade till en helt vit skärm när man släppte fingret efter att ha dragit solglasögon-stickern över hundfotot i Mugshot-kortet. Konsolen visade `VisualLookUp.EligibilityError` + `[MADService] Client XPC connection invalidated` (iOS eget "Visual Look Up"-system), följt av en JS-stacktrace: `TypeError: null is not an object (evaluating 's.current.posX')`.
+
+Två separata problem hittades och åtgärdades (se decisions.md för full teknisk bakgrund):
+1. iOS native bildanalys (Visual Look Up) triggades av long-press-liknande gester på overlappande dragbara lager, oberoende av CSS `-webkit-touch-callout`/`pointer-events` — löst med en `WKUIDelegate`-proxy (`ContextMenuDisablingUIDelegate` i `MainViewController.swift`) som stänger av webviewens inbyggda kontextmeny helt.
+2. Den faktiska kraschen var en race condition i `useDraggablePhoto.js`: en ref (`dragStart.current`) lästes lat inifrån en `setPos`-updater-callback som React kan köra fördröjt, och hann bli `null` (satt av en `pointerup`) innan callbacken exekverade.
+
+**Lärdom:** appen saknade en React error boundary, så ett ohanterat JS-fel innebar en helt vit skärm utan någon indikation till användaren om vad som hänt. `src/components/ErrorBoundary.jsx` lades till runt hela appträdet som skyddsnät — visar ett "Något gick fel"-meddelande med en återställ-knapp istället.

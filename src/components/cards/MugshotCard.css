@@ -58,6 +58,44 @@
   );
 }
 
+.mugshot-sticker-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.mugshot-sticker {
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.mugshot-sticker-icon {
+  width: 90px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}
+
+.mugshot-grain {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background-image: url('./textures/film-grain.jpg');
+  background-size: 220px 220px;
+  background-repeat: repeat;
+  mix-blend-mode: overlay;
+  opacity: 0.14;
+}
+
 .mugshot-stamp {
   position: absolute;
   top: 66%;
@@ -114,23 +152,35 @@
   right: 0.35rem;
 }
 
-.mugshot-photo {
+.mugshot-photo-wrap {
   position: absolute;
   z-index: 1;
-  left: 50%;
-  bottom: 0;
-  transform: translateX(-50%);
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.mugshot-photo {
   max-width: 88%;
   max-height: 72%;
   width: auto;
   height: auto;
   object-fit: contain;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-user-drag: none;
   filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.3));
+  cursor: grab;
 }
 
 .mugshot-photo-placeholder {
-  position: relative;
-  z-index: 1;
   width: 100%;
   height: 100%;
   display: flex;

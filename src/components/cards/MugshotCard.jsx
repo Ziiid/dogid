@@ -2,12 +2,16 @@ import { useEffect, useState } from 'react'
 import { formatShortDate } from '../../lib/format.js'
 import { stableId } from '../../lib/hash.js'
 import { useLanguage } from '../../lib/i18n.jsx'
+import { useDraggablePhoto } from '../../lib/useDraggablePhoto.js'
 import PawIcon from './PawIcon.jsx'
+import SunglassesIcon from './SunglassesIcon.jsx'
 import './MugshotCard.css'
 
 export const DEFAULT_MUGSHOT_CAPTION = 'Guilty as charged – for being cute'
 
 const SCALE_CM = [90, 80, 70, 60, 50, 40, 30, 20, 10]
+
+const STICKER_ICONS = { sunglasses: SunglassesIcon }
 
 function formatStampDate(date = new Date()) {
   const d = String(date.getDate()).padStart(2, '0')
@@ -15,9 +19,41 @@ function formatStampDate(date = new Date()) {
   return `${m}-${d}-${date.getFullYear()}`
 }
 
-function MugshotCard({ dog, photoUri, onCaptionChange }) {
+function MugshotSticker({ id, transform, onChange }) {
+  const Icon = STICKER_ICONS[id]
+  const drag = useDraggablePhoto({
+    x: transform.x,
+    y: transform.y,
+    scale: transform.scale,
+    onChange: (next) => onChange(id, next),
+  })
+
+  if (!Icon) return null
+
+  return (
+    <div className="mugshot-sticker-wrap">
+      <div className="mugshot-sticker" style={drag.style} {...drag.handlers}>
+        <Icon className="mugshot-sticker-icon" />
+      </div>
+    </div>
+  )
+}
+
+function MugshotCard({ dog, photoUri, onCaptionChange, onPhotoTransformChange, onStickersChange }) {
   const { t } = useLanguage()
   const [caption, setCaption] = useState(dog.mugshotCaption ?? DEFAULT_MUGSHOT_CAPTION)
+  const photoTransform = dog.mugshotPhotoTransform
+  const drag = useDraggablePhoto({
+    x: photoTransform?.x ?? 0,
+    y: photoTransform?.y ?? 0,
+    scale: photoTransform?.scale ?? 1,
+    onChange: onPhotoTransformChange,
+  })
+  const stickers = dog.mugshotStickers ?? {}
+
+  function handleStickerTransformChange(id, transform) {
+    onStickersChange({ ...stickers, [id]: transform })
+  }
 
   useEffect(() => {
     setCaption(dog.mugshotCaption ?? DEFAULT_MUGSHOT_CAPTION)
@@ -50,16 +86,34 @@ function MugshotCard({ dog, photoUri, onCaptionChange }) {
         <div className="mugshot-vignette" />
         <div className="mugshot-flash" />
 
-        {photoUri ? (
-          <img className="mugshot-photo" src={photoUri} alt={dog.name} />
-        ) : (
-          <div className="mugshot-photo-placeholder">
-            <PawIcon className="mugshot-photo-placeholder-icon" />
-          </div>
-        )}
+        <div className="mugshot-photo-wrap" {...drag.handlers}>
+          {photoUri ? (
+            <img
+              className="mugshot-photo"
+              src={photoUri}
+              alt={dog.name}
+              style={drag.style}
+            />
+          ) : (
+            <div className="mugshot-photo-placeholder">
+              <PawIcon className="mugshot-photo-placeholder-icon" />
+            </div>
+          )}
+        </div>
 
         <div className="mugshot-stamp">Booked</div>
         <div className="mugshot-timestamp">{formatStampDate()}</div>
+
+        {Object.entries(stickers).map(([id, transform]) => (
+          <MugshotSticker
+            key={id}
+            id={id}
+            transform={transform}
+            onChange={handleStickerTransformChange}
+          />
+        ))}
+
+        <div className="mugshot-grain" />
       </div>
 
       <div className="mugshot-placard">

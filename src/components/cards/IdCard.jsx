@@ -30,7 +30,13 @@ function IdCard({ dog, photoUri }) {
       <div className="id-card-body">
         <div className="id-card-photo">
           {photoUri ? (
-            <img src={photoUri} alt={dog.name} />
+            <img
+              src={photoUri}
+              alt={dog.name}
+              style={{
+                objectPosition: `${dog.photoPositionX ?? 50}% ${dog.photoPositionY ?? 50}%`,
+              }}
+            />
           ) : (
             <div className="id-card-photo-placeholder" />
           )}

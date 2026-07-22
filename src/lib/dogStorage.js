@@ -37,6 +37,20 @@ export async function loadPhotoUri() {
   }
 }
 
+// html-to-image kan inte hämta capacitor://-URL:er via fetch() vid bildexport,
+// så delningsflödet behöver fotot inbäddat som data-URL istället.
+export async function loadPhotoBase64() {
+  try {
+    const { data } = await Filesystem.readFile({
+      path: PHOTO_FILENAME,
+      directory: Directory.Data,
+    })
+    return `data:image/png;base64,${data}`
+  } catch {
+    return null
+  }
+}
+
 export async function saveLang(lang) {
   await Preferences.set({ key: LANG_KEY, value: lang })
 }

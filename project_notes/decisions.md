@@ -69,6 +69,54 @@ Genre-korrekt engelska (Mugshots "CHARGE"/"BOOKED", Guards "Chief of Security") 
 
 App-ikon och splashscreen bygger på `dogsona.png` (ligger i repo-root) — kopierad till `AppIcon.appiconset` (1024×1024, ingen alfakanal) och till `Splash.imageset` (centrerad, rundade hörn, på appens varmvita bakgrund `#faf9f7`).
 
+## Stort scope-skifte: från sex kort till två djupa generatorer (2026-07-22)
+
+**Bakgrund:** Efter att ha byggt Wanted (western wanted-poster) och Behind Bars (fängelsegaller) som ytterligare två kortmallar, bollade användaren produktriktningen (både med ChatGPT och på egen hand). Slutsats: "Hellre två riktigt bra generatorer än tre där en ser halvfärdig ut."
+
+**Beslut:**
+- **Mugshot blir huvudfunktionen** — modern, ren, personlig, rolig. Ska bli en riktig konfigurerbar generator (flera bakgrunder, valbar BOOKED-stämpel, skyltar, drag/skala, stickers), inte bara ett statiskt kort.
+- **Wanted blir den estetiska/dramatiska generatorn** — sliten westernstil, med planerade varianter (Reward/Wanted/Dead or Alive/Sheriff's Notice), flera pappers-/ramvarianter, valbar belöningsvaluta, åldrings-slider.
+- **Behind Bars skjuts på framtiden.** Det såg för "tecknat"/klippt-och-klistrat ut (gallren kändes som en Snapchat-filter ovanpå fotot snarare än att hunden faktiskt satt i en cell). Ska bara återupptas om hunden kan integreras med riktigt ljus/skugga/djup i cellmiljön.
+- ID-kort, Körkort, Barkinder, Betyg, Guard kommenterades bort (inte borttagna) i `CardView.jsx` i samma veva — de tävlade om uppmärksamhet utan att bära någon av de två teman.
+
+**Motivering för själva principen** (två djupa > tre grunda): varje tema ska ha nog många val att en användare kan göra fem olika bilder utan att det känns likadant — det är vad som gör 29 kr motiverat istället för pinsamt. Se roadmap.md för konkret byggordning (Fas 1–3).
+
+**Namnbyte diskuterat men inte beslutat:** "Pawlice" (paw + police) föreslogs som bättre namn än "Dogsona" nu när brotts-temat är kärnan — ingen ändring gjord än.
+
+## Wanted-kortet: iterativ realism (2026-07-22)
+
+**Från CSS-gradienter till procedurellt genererade texturer.** Första versionen av både Wanted och Behind Bars byggde papper/trä/galler med rena CSS-gradienter (`repeating-linear-gradient`, `radial-gradient`). Användaren tyckte det blev för "tecknat" ("som att sätta på ett Snapchat-filter"). Löst genom att generera riktiga texturer offline med Python/PIL (brus, directional-squash-teknik för ådring, foxing-fläckar, oregelbundna brända hörn) och bunta dem som statiska JPG/PNG (`src/components/cards/textures/`) — CSS `background-image: url(...)` istället för gradienter. Genereringsskriptet i sig checkades **inte** in i repot (bara outputen), ligger i scratchpad.
+
+**Fotot ska smälta in i pappret, inte se ut som ett inklistrat foto.** Hundfotot är redan bakgrundsborttaget (transparent), så ett extra CSS-mask/vinjett-lager ovanpå skapade bara en ny konstgjord "ram". Löst genom att ta bort masken helt och istället använda staplade `drop-shadow()`-lager (0 offset, ökande blur, papprets egen färg) för att smälta konturens kant mjukt in i bakgrunden, plus `mix-blend-mode: multiply` + gråskala/sepia-filter för färgmatchning.
+
+**Filmkorn som enande lager.** Samma `film-grain.jpg`-textur läggs som ett topplager (`mix-blend-mode: overlay`, låg opacitet) över både Wanted och Mugshot, så foto + bakgrund + rekvisita känns som samma fotografi istället för tre olika lager.
+
+## Dela kortet (2026-07-22)
+
+**`html-to-image` + `@capacitor/filesystem` + `@capacitor/share`.** Kortet (`.template-stage`) renderas till en PNG (`toPng`, `pixelRatio: 2`), skrivs till `Directory.Cache`, delas via native delningsmeny (`Share.share({ files: [uri] })`) — öppnar automatiskt SMS/Instagram/TikTok/etc. utan appspecifik integration.
+
+**Bugg: hundfotot saknades i den delade bilden.** `html-to-image` kunde inte hämta fotots `capacitor://.../​_capacitor_file_/...`-URL via `fetch()` under exporten (troligen för att den specialschema-URL:en kräver Capacitors bridge-hantering som fetch inte går igenom på samma sätt som `<img src>`). Fix: läs fotot som base64 (`loadPhotoBase64()` i `dogStorage.js`) och byt tillfälligt ut `<img>`-elementens `src` till en `data:`-URL bara under exportmomentet, återställ efteråt.
+
+**Exportformat komponeras med `<canvas>`.** Post (1080×1080), Story (1080×1920), Bakgrund (1170×2532): en blurad uppskalad (cover-fit) kopia av kortet som bakgrund + det skarpa kortet centrerat (contain-fit) ovanpå, så det aldrig blir tomma kanter i ett annat sidoförhållande än kortets eget.
+
+## Drag/nyp-skala + sticker-arkitektur (2026-07-22)
+
+**`useDraggablePhoto`-hook** (`src/lib/useDraggablePhoto.js`), delad mellan fotot och alla stickers. En-fingers-pointer flyttar, två samtidiga pointers skalar (nypa). Committar (`onChange`) bara när sista fingret lyfts — inte varje `pointermove` — annars hade varje pixel av rörelse triggat en disk-skrivning via `onFieldChange`/Preferences.
+
+**Sticker-modell inspirerad av Toca Boca:** en "sticker-hylla" (av/på-knappar) under kortet lägger till/tar bort rekvisita (första: solglasögon, `SunglassesIcon.jsx`, ren SVG). Ingen explicit "välj lager"-state behövdes — varje sticker har sin egen `useDraggablePhoto`-instans och eget DOM-element, så webbläsarens vanliga hit-testing (vilket element ligger överst där du trycker) räcker för att routa pekhändelser rätt, ingen risk för att gester krockar mellan lager.
+
+**Data:** `dog.mugshotPhotoTransform` / `dog.wantedPhotoTransform` för fotot, `dog.mugshotStickers` (objekt keyat på sticker-id) för rekvisita. Config för vilka stickers som finns i `mugshotStickers.js`.
+
+## Två allvarliga buggar: vit skärm vid drag (2026-07-22)
+
+**Bugg 1 — iOS "Visual Look Up" kraschade appen vid long-press på overlays.** Symptom: konsolen visade `VisualLookUp.EligibilityError` + `[MADService] Client XPC connection invalidated`, följt av vit skärm — men bara när man drog i en sticker som låg *ovanpå* hundfotot, inte när man drog fotot ensamt. Sannolik orsak: iOS egen native bildanalys (Visual Look Up) hit-testar den komponerade skärmytan oberoende av DOM/CSS `pointer-events`, hittar hundfotot *under* SVG-overlayet, och krockar med vår egen pointer capture på det översta elementet.
+
+Fix krävde nativ kod, inte CSS: `CAPBridgeViewController.loadView()` är `final` och sätter sin egen interna `WebViewDelegationHandler` som webviewens `uiDelegate` — en override av `WKUIDelegate`-metoder direkt i `MainViewController` anropas alltså aldrig. Lösning: en proxy-delegate (`ContextMenuDisablingUIDelegate` i `MainViewController.swift`) som tar över `webView.uiDelegate` i `capacitorDidLoad()` (efter att Capacitor satt upp sitt eget), implementerar bara `contextMenuConfigurationForElement` själv (`completionHandler(nil)` → ingen kontextmeny/bildanalys alls), och vidarebefordrar allt annat oförändrat via Objective-C message forwarding (`forwardingTarget(for:)`) till Capacitors egen handler.
+
+**Bugg 2 — den faktiska kraschen var en race condition, inte Visual Look Up.** Efter fix ovan kvarstod vit skärm, nu med tydlig JS-stacktrace: `TypeError: null is not an object (evaluating 's.current.posX')` i `useDraggablePhoto.js`. Orsak: `dragStart.current.posX` lästes *inne i* en `setPos((prev) => ...)`-callback, som React kan köra fördröjt (batching) — en `pointerup` hann sätta `dragStart.current = null` innan callbacken faktiskt exekverade. Fix: fånga `dragStart.current` i en vanlig variabel *innan* `setPos` anropas, så inget läses lat inifrån updater-callbacken.
+
+**Lärdom:** appen hade ingen React error boundary, så det enda symptomet på ett ohanterat JS-fel var en helt vit skärm — svårt att skilja "appen kraschade" från "native problem" utan konsolloggen. La till `src/components/ErrorBoundary.jsx` runt hela appen (i `main.jsx`) som skyddsnät.
+
 ## Bygg-/synk-flöde (Capacitor)
 
 **`npx vite build` uppdaterar bara `dist/`, inte det Xcode faktiskt bygger**

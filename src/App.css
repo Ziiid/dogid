@@ -11,6 +11,30 @@
   padding-right: env(safe-area-inset-right);
 }
 
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  background: #faf9f7;
+  color: #2d2d2d;
+}
+
+.error-boundary button {
+  border: none;
+  background: #6aab8a;
+  color: #faf9f7;
+  padding: 0.7rem 1.4rem;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
 .lang-row {
   align-self: stretch;
   display: flex;

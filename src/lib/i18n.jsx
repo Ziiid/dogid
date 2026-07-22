@@ -14,6 +14,8 @@ const STRINGS = {
   tplDating: { sv: 'Barkinder', en: 'Barkinder' },
   tplReport: { sv: 'Betyg', en: 'Report Card' },
   tplGuard: { sv: 'Guard', en: 'Guard' },
+  tplWanted: { sv: 'Efterlyst', en: 'Wanted' },
+  tplBars: { sv: 'Bakom galler', en: 'Behind Bars' },
   cardEmpty: {
     sv: 'Fyll i formuläret för att se ditt kort.',
     en: 'Fill in the form to see your card.',
@@ -25,6 +27,10 @@ const STRINGS = {
   },
   photoProcessing: { sv: 'Tar bort bakgrund…', en: 'Removing background…' },
   photoAdd: { sv: 'Lägg till foto', en: 'Add photo' },
+  photoDragHint: {
+    sv: 'Dra bilden för att flytta den i ringen',
+    en: 'Drag the photo to reposition it in the ring',
+  },
   labelName: { sv: 'Namn', en: 'Name' },
   labelBreed: { sv: 'Ras', en: 'Breed' },
   labelBirthDate: { sv: 'Födelsedatum', en: 'Date of birth' },
@@ -102,6 +108,50 @@ const STRINGS = {
   },
   guardSignatureCaption: { sv: 'Godkänd vakthund', en: 'Certified guard dog' },
   guardStamp: { sv: 'På vakt', en: 'On duty' },
+
+  wantedReward: { sv: 'BELÖNING', en: 'REWARD' },
+  wantedApprehension: {
+    sv: 'Utfästes för gripande av',
+    en: 'Will be paid for the apprehension of',
+  },
+  wantedChargeLabel: { sv: 'EFTERLYST FÖR:', en: 'WANTED FOR:' },
+  wantedChargePlaceholder: {
+    sv: 'Skriv vad hunden är efterlyst för…',
+    en: 'Write what the dog is wanted for…',
+  },
+  wantedStamp: { sv: 'PÅ FRI FOT', en: 'STILL LOOSE' },
+
+  editableFieldsTitle: { sv: 'Editerbara fält', en: 'Editable fields' },
+  wantedEditableReward: { sv: 'Belöningsbelopp', en: 'Reward amount' },
+  wantedEditableCharge: {
+    sv: 'Anklagelse (vad hunden är efterlyst för)',
+    en: 'Charge (what the dog is wanted for)',
+  },
+
+  barsDocType: { sv: 'I FÖRVAR', en: 'IN CUSTODY' },
+  barsInmateLabel: { sv: 'INTERN NR', en: 'INMATE NO.' },
+  barsReasonLabel: { sv: 'ANLEDNING:', en: 'REASON:' },
+  barsReasonPlaceholder: {
+    sv: 'Skriv varför hunden sitter inne…',
+    en: 'Write why the dog is locked up…',
+  },
+  barsEditableReason: {
+    sv: 'Anledning till fängelsevistelsen',
+    en: 'Reason for imprisonment',
+  },
+  shareButton: { sv: 'Dela', en: 'Share' },
+  shareDialogTitle: { sv: 'Dela kortet', en: 'Share card' },
+  shareError: {
+    sv: 'Kunde inte dela kortet just nu.',
+    en: 'Could not share the card right now.',
+  },
+
+  stickerSunglasses: { sv: 'Solglasögon', en: 'Sunglasses' },
+
+  formatOriginal: { sv: 'Kort', en: 'Card' },
+  formatPost: { sv: 'Inlägg', en: 'Post' },
+  formatStory: { sv: 'Story', en: 'Story' },
+  formatWallpaper: { sv: 'Bakgrund', en: 'Wallpaper' },
 }
 
 export function getReportCategories(lang) {
@@ -144,6 +194,18 @@ export function getDefaultGuardNote(lang) {
   return lang === 'en'
     ? 'Barked furiously at a chip bag blowing past. Situation contained.'
     : 'Skällde argt på ett chipspåse som blåste förbi. Situationen avvärjd.'
+}
+
+export function getDefaultWantedCharge(lang) {
+  return lang === 'en'
+    ? 'Theft of twelve socks and disturbing the peace of the living room.'
+    : 'Stöld av tolv strumpor och störande av den allmänna ordningen i vardagsrummet.'
+}
+
+export function getDefaultBehindBarsReason(lang) {
+  return lang === 'en'
+    ? 'Escaped the yard three times and showed no remorse.'
+    : 'Rymde från trädgården tre gånger utan ett uns ånger.'
 }
 
 export function getDefaultDatingBio(lang) {

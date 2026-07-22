@@ -43,7 +43,13 @@ function GuardCard({ dog, photoUri, onNoteChange }) {
       <div className="guard-id-row">
         <div className="guard-photo">
           {photoUri ? (
-            <img src={photoUri} alt={dog.name} />
+            <img
+              src={photoUri}
+              alt={dog.name}
+              style={{
+                objectPosition: `${dog.photoPositionX ?? 50}% ${dog.photoPositionY ?? 50}%`,
+              }}
+            />
           ) : (
             <div className="guard-photo-placeholder">
               <PawIcon className="guard-photo-placeholder-icon" />
