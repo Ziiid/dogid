@@ -1,10 +1,4 @@
 import { useDraggablePhoto } from '../../lib/useDraggablePhoto.js'
-import SunglassesIcon from './SunglassesIcon.jsx'
-import CapIcon from './CapIcon.jsx'
-import SombreroIcon from './SombreroIcon.jsx'
-import SpeechBubbleIcon from './SpeechBubbleIcon.jsx'
-import HeartIcon from './HeartIcon.jsx'
-import LaughingEmojiIcon from './LaughingEmojiIcon.jsx'
 import guiltyStampRect from './stickerAssets/guiltyStampRect.png'
 import handcuffs from './stickerAssets/handcuffs.png'
 import siren from './stickerAssets/siren.png'
@@ -25,17 +19,59 @@ import caseClosedBoard from './stickerAssets/caseClosedBoard.png'
 import innocentNote from './stickerAssets/innocentNote.png'
 import guiltyStampRound from './stickerAssets/guiltyStampRound.png'
 import pawNote from './stickerAssets/pawNote.png'
+import underArrest from './stickerAssets/underArrest.png'
+import napChampion from './stickerAssets/napChampion.png'
+import bestSniffer from './stickerAssets/bestSniffer.png'
+import rewardCoins from './stickerAssets/rewardCoins.png'
+import dramaQueen from './stickerAssets/dramaQueen.png'
+import tinyTerror from './stickerAssets/tinyTerror.png'
+import sparkles from './stickerAssets/sparkles.png'
+import couchNap from './stickerAssets/couchNap.png'
+import policeHat from './stickerAssets/policeHat.png'
+import sheriffHat from './stickerAssets/sheriffHat.png'
+import militaryBeret from './stickerAssets/militaryBeret.png'
+import firefighterHelmet from './stickerAssets/firefighterHelmet.png'
+import hardHat from './stickerAssets/hardHat.png'
+import chefHat from './stickerAssets/chefHat.png'
+import pirateHat from './stickerAssets/pirateHat.png'
+import captainHat from './stickerAssets/captainHat.png'
+import vikingHelmet from './stickerAssets/vikingHelmet.png'
+import detectiveHat from './stickerAssets/detectiveHat.png'
+import partyHat from './stickerAssets/partyHat.png'
+import santaHat from './stickerAssets/santaHat.png'
+import reindeerAntlers from './stickerAssets/reindeerAntlers.png'
+import witchHat from './stickerAssets/witchHat.png'
+import wizardHat from './stickerAssets/wizardHat.png'
+import birthdayHat from './stickerAssets/birthdayHat.png'
+import sombrero from './stickerAssets/sombrero.png'
+import oktoberfestHat from './stickerAssets/oktoberfestHat.png'
+import smiling from './stickerAssets/smiling.png'
+import laughingTears from './stickerAssets/laughingTears.png'
+import heartEyes from './stickerAssets/heartEyes.png'
+import tongueOut from './stickerAssets/tongueOut.png'
+import blowingKiss from './stickerAssets/blowingKiss.png'
+import rollingEyes from './stickerAssets/rollingEyes.png'
+import bulgingEyes from './stickerAssets/bulgingEyes.png'
+import sunglassesEmoji from './stickerAssets/sunglassesEmoji.png'
+import smirking from './stickerAssets/smirking.png'
+import tongueSweat from './stickerAssets/tongueSweat.png'
+import sleepy from './stickerAssets/sleepy.png'
+import unamused from './stickerAssets/unamused.png'
+import blushingFlustered from './stickerAssets/blushingFlustered.png'
+import screamingInFear from './stickerAssets/screamingInFear.png'
+import crying from './stickerAssets/crying.png'
+import laughingDead from './stickerAssets/laughingDead.png'
+import angrySwearing from './stickerAssets/angrySwearing.png'
+import mindBlown from './stickerAssets/mindBlown.png'
+import heart from './stickerAssets/heart.png'
+import poopEmoji from './stickerAssets/poopEmoji.png'
+import coffeeMug from './stickerAssets/coffeeMug.png'
+import matchaCup from './stickerAssets/matchaCup.png'
 import './CardSticker.css'
 
-// Värdet är antingen en SVG-komponent (handritade ikoner) eller en bildsökväg
-// (string, för foton/PNG-stickers) - StickerGraphic renderar rätt sak för båda.
+// Värdet är en bildsökväg (string) till en PNG-sticker - StickerGraphic
+// stödjer även SVG-komponenter som värde ifall handritade ikoner återkommer.
 export const STICKER_ICONS = {
-  sunglasses: SunglassesIcon,
-  cap: CapIcon,
-  sombrero: SombreroIcon,
-  speechBubble: SpeechBubbleIcon,
-  heart: HeartIcon,
-  laughingEmoji: LaughingEmojiIcon,
   banditMask,
   guiltyStampRect,
   handcuffs,
@@ -56,6 +92,54 @@ export const STICKER_ICONS = {
   innocentNote,
   guiltyStampRound,
   pawNote,
+  underArrest,
+  napChampion,
+  bestSniffer,
+  rewardCoins,
+  dramaQueen,
+  tinyTerror,
+  sparkles,
+  couchNap,
+  policeHat,
+  sheriffHat,
+  militaryBeret,
+  firefighterHelmet,
+  hardHat,
+  chefHat,
+  pirateHat,
+  captainHat,
+  vikingHelmet,
+  detectiveHat,
+  partyHat,
+  santaHat,
+  reindeerAntlers,
+  witchHat,
+  wizardHat,
+  birthdayHat,
+  sombrero,
+  oktoberfestHat,
+  smiling,
+  laughingTears,
+  heartEyes,
+  tongueOut,
+  blowingKiss,
+  rollingEyes,
+  bulgingEyes,
+  sunglassesEmoji,
+  smirking,
+  tongueSweat,
+  sleepy,
+  unamused,
+  blushingFlustered,
+  screamingInFear,
+  crying,
+  laughingDead,
+  angrySwearing,
+  mindBlown,
+  heart,
+  poopEmoji,
+  coffeeMug,
+  matchaCup,
 }
 
 export function StickerGraphic({ id, className }) {
