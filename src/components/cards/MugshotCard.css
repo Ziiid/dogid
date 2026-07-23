@@ -58,32 +58,6 @@
   );
 }
 
-.mugshot-sticker-wrap {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  pointer-events: none;
-}
-
-.mugshot-sticker {
-  pointer-events: auto;
-  touch-action: none;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  user-select: none;
-  cursor: grab;
-}
-
-.mugshot-sticker-icon {
-  width: 90px;
-  height: auto;
-  display: block;
-  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
-}
-
 .mugshot-grain {
   position: absolute;
   inset: 0;

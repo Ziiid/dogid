@@ -4,11 +4,22 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value))
 }
 
-// Drag för att flytta hunden i scenen, tvåfingers-nyp för att skala den.
+function angleOf(pts) {
+  return (Math.atan2(pts[1].y - pts[0].y, pts[1].x - pts[0].x) * 180) / Math.PI
+}
+
+// Drag för att flytta hunden i scenen, tvåfingers-nyp för att skala och vrida den
+// (samma gest ger både skala och rotation, som i Bilder/Instagram).
 // Committar (onChange) bara när sista fingret lyfts, inte varje pointermove -
 // annars skulle varje liten rörelse trigga en disk-skrivning via onFieldChange.
-export function useDraggablePhoto({ x: initX = 0, y: initY = 0, scale: initScale = 1, onChange }) {
-  const [pos, setPos] = useState({ x: initX, y: initY, scale: initScale })
+export function useDraggablePhoto({
+  x: initX = 0,
+  y: initY = 0,
+  scale: initScale = 1,
+  rotation: initRotation = 0,
+  onChange,
+}) {
+  const [pos, setPos] = useState({ x: initX, y: initY, scale: initScale, rotation: initRotation })
   const pointers = useRef(new Map())
   const dragStart = useRef(null)
   const pinchStart = useRef(null)
@@ -16,8 +27,8 @@ export function useDraggablePhoto({ x: initX = 0, y: initY = 0, scale: initScale
   posRef.current = pos
 
   useEffect(() => {
-    setPos({ x: initX, y: initY, scale: initScale })
-  }, [initX, initY, initScale])
+    setPos({ x: initX, y: initY, scale: initScale, rotation: initRotation })
+  }, [initX, initY, initScale, initRotation])
 
   function handlePointerDown(e) {
     e.currentTarget.setPointerCapture(e.pointerId)
@@ -29,7 +40,7 @@ export function useDraggablePhoto({ x: initX = 0, y: initY = 0, scale: initScale
     } else if (pointers.current.size === 2) {
       const pts = Array.from(pointers.current.values())
       const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y)
-      pinchStart.current = { dist, scale: posRef.current.scale }
+      pinchStart.current = { dist, scale: posRef.current.scale, angle: angleOf(pts), rotation: posRef.current.rotation }
       dragStart.current = null
     }
   }
@@ -42,7 +53,8 @@ export function useDraggablePhoto({ x: initX = 0, y: initY = 0, scale: initScale
       const pts = Array.from(pointers.current.values())
       const dist = Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y)
       const nextScale = clamp((dist / pinchStart.current.dist) * pinchStart.current.scale, 0.5, 2.5)
-      setPos((prev) => ({ ...prev, scale: nextScale }))
+      const nextRotation = pinchStart.current.rotation + (angleOf(pts) - pinchStart.current.angle)
+      setPos((prev) => ({ ...prev, scale: nextScale, rotation: nextRotation }))
       return
     }
 
@@ -77,7 +89,7 @@ export function useDraggablePhoto({ x: initX = 0, y: initY = 0, scale: initScale
       onPointerCancel: handlePointerUp,
     },
     style: {
-      transform: `translate(${pos.x}px, ${pos.y}px) scale(${pos.scale})`,
+      transform: `translate(${pos.x}px, ${pos.y}px) rotate(${pos.rotation}deg) scale(${pos.scale})`,
     },
   }
 }

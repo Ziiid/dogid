@@ -1,0 +1,29 @@
+.card-sticker-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.card-sticker {
+  pointer-events: auto;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: grab;
+  /* Osynlig extra touch-yta - ikonen är för liten för att båda fingrarna
+     i en nyp-gest ska träffa den, annars faller det andra fingret igenom
+     till det som ligger bakom och drar/skalar det istället för stickern. */
+  padding: 46px;
+}
+
+.card-sticker-icon {
+  width: 90px;
+  height: auto;
+  display: block;
+  filter: drop-shadow(0 3px 4px rgba(0, 0, 0, 0.35));
+}

@@ -117,6 +117,26 @@ Fix krävde nativ kod, inte CSS: `CAPBridgeViewController.loadView()` är `final
 
 **Lärdom:** appen hade ingen React error boundary, så det enda symptomet på ett ohanterat JS-fel var en helt vit skärm — svårt att skilja "appen kraschade" från "native problem" utan konsolloggen. La till `src/components/ErrorBoundary.jsx` runt hela appen (i `main.jsx`) som skyddsnät.
 
+## Tredje kortet, sticker-utbyggnad och kodstädning (2026-07-23)
+
+**Produktramning skärpt: "en generator för att skapa roliga hundbilder på egen hand".** Bekräftar och förenklar scope-skiftet från 2026-07-22 (två djupa generatorer) till en enda mening — appens värde är att låta användaren själv komponera en rolig bild (kort + rekvisita), inte att fylla i formulär för statiska mallar.
+
+**Övervägde och avfärdade: ett enda kort + "Background"-väljare istället för tre separata mallar.** Idén var att slå ihop Studio/Mugshot/Wanted till ett kort med en bakgrundsväljare under (likt sticker-trayn). Avfärdades eftersom Mugshot och Wanted inte bara är visuella bakgrunder — de har egna redigerbara textfält och layouter (Mugshots "placard" med charge-text, Wanteds reward-rubrik + stämpel). En sådan sammanslagning hade krävt villkorad UI för fälten per bakgrund, mer komplext än nuvarande tre-flikars-lösning. Bibehölls som det är.
+
+**Tredje kortet "Studio" tillagt** (`BlankCard.jsx`) — tomt vitt kort, bara hundfoto (fritt drag-/pinch-/rotationsbart) + fri sticker-lek, ingen text alls. Först i template-tabs och default vald flik. Fick UI-namnet "Studio" (inte det interna arbetsnamnet "Card 1"). Samma bredd/aspect-ratio (4:5) som Mugshot-kortets fotoyta.
+
+**Sticker-rotation lagd ovanpå befintlig nyp-skala, ingen ny gest.** `useDraggablePhoto.js` beräknar nu även vinkeln mellan de två pekarna (`Math.atan2`) i samma tvåfingersgest som redan skalade, och lägger till `rotate()` i samma CSS-transform. Gäller både fotot och alla stickers i alla kort.
+
+**Sticker-kategorier och delad `CardSticker.jsx`.** Stickers grupperas nu under rubriker i trayn: Huvudbonader, Emojis, Polis, Rekvisita (`STICKER_CATEGORIES` i `mugshotStickers.js`). Sticker-rendering (ikon-mappning + drag/pinch/rotation-wrapper) extraherades ur `MugshotCard.jsx` till en delad `CardSticker.jsx` eftersom både Mugshot och Studio nu behöver exakt samma logik — duplicering hade annars krävt 6 dubblerade ikonimporter.
+
+**Tray visar nu själva stickerbilden, inte en textetikett.** Knapparna i sticker-trayn renderade tidigare bara `t(sticker.labelKey)` som text — användaren efterfrågade att se vad man faktiskt väljer. Löst med en `StickerGraphic`-hjälpkomponent (i `CardSticker.jsx`) som renderar rätt sak oavsett om stickern är en handritad SVG-komponent eller en PNG-bild. Textnamnet finns kvar som `title`/`aria-label` för tillgänglighet.
+
+**PNG-stickers från ChatGPT importeras som ett helt "sticker-sheet", inte separata filer — beskärs med connected-component-analys, inte ett fast rutnät.** ChatGPT levererar flera transparenta stickers på en och samma bild. Ett första försök att beskära utifrån ett fast 4×6-rutnät klippte av kanten på stickers som svämmade över sin nominella cell (ChatGPTs layout är inte pixelperfekt). Löst med ett eget flood-fill/connected-components-skript i ren Python (ingen numpy/scipy tillgänglig i miljön) som hittar varje stickers faktiska gränser oavsett rutnätsavvikelse. Skriptet och originalbilden ligger i `stickers/` (utanför `src/`, inte del av byggflödet), de färdigbeskurna PNG:erna i `src/components/cards/stickerAssets/`.
+
+**Kvalitetsgranskning: AI-genererad inbränd text i rastergrafik måste kollas manuellt, går inte att rätta i efterhand.** Av 24 beskurna stickers hade 4 förvrängd/felstavad text bakad in i själva bildkonsten (t.ex. "WAINTY!" istället för "WANTED!", "PET FOДCE" istället för "PET FORCE") — omöjligt att fixa utan att generera om bilden, eftersom det är pixlar, inte redigerbar text. Dessa fyra kasserades; bara de 20 godkända togs in i appen. Vänta nya bilder från ChatGPT för resten.
+
+**Dödkod faktiskt borttagen, inte längre bara kommenterad.** ID-kort, Körkort, Barkinder, Betyg, Guard och Bakom galler (`IdCard`, `DriversLicenseCard`, `DatingCard`, `ReportCard`, `GuardCard`, `BehindBarsCard`) kommenterades bort 2026-07-22 vid scope-skiftet men låg kvar i repot. Nu borttagna på riktigt (komponenter + CSS + deras exklusiva ikoner `BinocularsIcon.jsx`/`HandcuffsIcon.jsx` + oanvända i18n-strängar och `format.js`-hjälpfunktioner `formatDate`/`calcAge`/`formatGender`/`genderCode`), eftersom tre-korts-scopet (Studio/Mugshot/Wanted) nu bedöms stabilt nog att sluta bära på dem "i fall vi ångrar oss".
+
 ## Bygg-/synk-flöde (Capacitor)
 
 **`npx vite build` uppdaterar bara `dist/`, inte det Xcode faktiskt bygger**

@@ -2,21 +2,19 @@ import { useRef, useState } from 'react'
 import { toPng } from 'html-to-image'
 import { Filesystem, Directory } from '@capacitor/filesystem'
 import { Share } from '@capacitor/share'
-// import IdCard from './cards/IdCard.jsx'
-// import DriversLicenseCard from './cards/DriversLicenseCard.jsx'
+import BlankCard from './cards/BlankCard.jsx'
 import MugshotCard from './cards/MugshotCard.jsx'
-// import DatingCard from './cards/DatingCard.jsx'
-// import ReportCard from './cards/ReportCard.jsx'
-// import GuardCard from './cards/GuardCard.jsx'
 import WantedCard from './cards/WantedCard.jsx'
-// import BehindBarsCard from './cards/BehindBarsCard.jsx'
 import ShareIcon from './cards/ShareIcon.jsx'
-import { MUGSHOT_STICKERS } from './cards/mugshotStickers.js'
+import { MUGSHOT_STICKERS, STICKER_CATEGORIES } from './cards/mugshotStickers.js'
+import { StickerGraphic } from './cards/CardSticker.jsx'
 import { useLanguage } from '../lib/i18n.jsx'
 import { loadPhotoBase64 } from '../lib/dogStorage.js'
 import './CardView.css'
 
 const SHARE_FILENAME = 'dogsona-share.png'
+
+const STICKER_FIELD_BY_TEMPLATE = { blank: 'blankStickers', mugshot: 'mugshotStickers' }
 
 const FORMATS = [
   { id: 'original', labelKey: 'formatOriginal' },
@@ -59,19 +57,14 @@ async function composeForFormat(dataUrl, targetW, targetH) {
 }
 
 const TEMPLATES = [
-  // { id: 'id', labelKey: 'tplId' },
-  // { id: 'license', labelKey: 'tplLicense' },
+  { id: 'blank', labelKey: 'tplBlank' },
   { id: 'mugshot', labelKey: 'tplMugshot' },
-  // { id: 'dating', labelKey: 'tplDating' },
-  // { id: 'report', labelKey: 'tplReport' },
-  // { id: 'guard', labelKey: 'tplGuard' },
   { id: 'wanted', labelKey: 'tplWanted' },
-  // { id: 'bars', labelKey: 'tplBars' },
 ]
 
 function CardView({ dog, photoUri, onFieldChange }) {
   const { t } = useLanguage()
-  const [template, setTemplate] = useState('mugshot')
+  const [template, setTemplate] = useState('blank')
   const [format, setFormat] = useState('original')
   const [sharing, setSharing] = useState(false)
   const stageRef = useRef(null)
@@ -80,13 +73,15 @@ function CardView({ dog, photoUri, onFieldChange }) {
     return <p className="card-empty">{t('cardEmpty')}</p>
   }
 
+  const stickerField = STICKER_FIELD_BY_TEMPLATE[template]
+
   function handleStickerToggle(stickerId, defaultTransform) {
-    const current = dog.mugshotStickers ?? {}
+    const current = dog[stickerField] ?? {}
     if (current[stickerId]) {
       const { [stickerId]: _removed, ...rest } = current
-      onFieldChange('mugshotStickers', rest)
+      onFieldChange(stickerField, rest)
     } else {
-      onFieldChange('mugshotStickers', { ...current, [stickerId]: defaultTransform })
+      onFieldChange(stickerField, { ...current, [stickerId]: defaultTransform })
     }
   }
 
@@ -154,8 +149,14 @@ function CardView({ dog, photoUri, onFieldChange }) {
       </div>
 
       <div className="template-stage" ref={stageRef}>
-        {/* {template === 'id' && <IdCard dog={dog} photoUri={photoUri} />} */}
-        {/* {template === 'license' && <DriversLicenseCard dog={dog} photoUri={photoUri} />} */}
+        {template === 'blank' && (
+          <BlankCard
+            dog={dog}
+            photoUri={photoUri}
+            onPhotoTransformChange={(value) => onFieldChange('blankPhotoTransform', value)}
+            onStickersChange={(value) => onFieldChange('blankStickers', value)}
+          />
+        )}
         {template === 'mugshot' && (
           <MugshotCard
             dog={dog}
@@ -165,28 +166,6 @@ function CardView({ dog, photoUri, onFieldChange }) {
             onStickersChange={(value) => onFieldChange('mugshotStickers', value)}
           />
         )}
-        {/* {template === 'dating' && (
-          <DatingCard
-            dog={dog}
-            photoUri={photoUri}
-            onBioChange={(value) => onFieldChange('datingBio', value)}
-          />
-        )} */}
-        {/* {template === 'report' && (
-          <ReportCard
-            dog={dog}
-            photoUri={photoUri}
-            onGradesChange={(value) => onFieldChange('reportGrades', value)}
-            onCommentChange={(value) => onFieldChange('reportComment', value)}
-          />
-        )} */}
-        {/* {template === 'guard' && (
-          <GuardCard
-            dog={dog}
-            photoUri={photoUri}
-            onNoteChange={(value) => onFieldChange('guardNote', value)}
-          />
-        )} */}
         {template === 'wanted' && (
           <WantedCard
             dog={dog}
@@ -196,26 +175,28 @@ function CardView({ dog, photoUri, onFieldChange }) {
             onPhotoTransformChange={(value) => onFieldChange('wantedPhotoTransform', value)}
           />
         )}
-        {/* {template === 'bars' && (
-          <BehindBarsCard
-            dog={dog}
-            photoUri={photoUri}
-            onReasonChange={(value) => onFieldChange('barsReason', value)}
-          />
-        )} */}
       </div>
 
-      {template === 'mugshot' && (
-        <div className="sticker-tray">
-          {MUGSHOT_STICKERS.map((sticker) => (
-            <button
-              key={sticker.id}
-              type="button"
-              className={dog.mugshotStickers?.[sticker.id] ? 'active' : ''}
-              onClick={() => handleStickerToggle(sticker.id, sticker.default)}
-            >
-              {t(sticker.labelKey)}
-            </button>
+      {stickerField && (
+        <div className="sticker-categories">
+          {STICKER_CATEGORIES.map((category) => (
+            <div key={category.id} className="sticker-category">
+              <h3 className="sticker-category-label">{t(category.labelKey)}</h3>
+              <div className="sticker-tray">
+                {MUGSHOT_STICKERS.filter((sticker) => sticker.category === category.id).map((sticker) => (
+                  <button
+                    key={sticker.id}
+                    type="button"
+                    className={dog[stickerField]?.[sticker.id] ? 'active' : ''}
+                    onClick={() => handleStickerToggle(sticker.id, sticker.default)}
+                    title={t(sticker.labelKey)}
+                    aria-label={t(sticker.labelKey)}
+                  >
+                    <StickerGraphic id={sticker.id} className="sticker-tray-icon" />
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       )}
@@ -230,14 +211,7 @@ function CardView({ dog, photoUri, onFieldChange }) {
         </div>
       )}
 
-      {/* {template === 'bars' && (
-        <div className="editable-fields-info">
-          <h3>{t('editableFieldsTitle')}</h3>
-          <ul>
-            <li>{t('barsEditableReason')}</li>
-          </ul>
-        </div>
-      )} */}
+      <hr className="section-divider" />
 
       <div className="format-tabs">
         {FORMATS.map((f) => (

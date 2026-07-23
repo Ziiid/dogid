@@ -61,3 +61,17 @@ Två separata problem hittades och åtgärdades (se decisions.md för full tekni
 2. Den faktiska kraschen var en race condition i `useDraggablePhoto.js`: en ref (`dragStart.current`) lästes lat inifrån en `setPos`-updater-callback som React kan köra fördröjt, och hann bli `null` (satt av en `pointerup`) innan callbacken exekverade.
 
 **Lärdom:** appen saknade en React error boundary, så ett ohanterat JS-fel innebar en helt vit skärm utan någon indikation till användaren om vad som hänt. `src/components/ErrorBoundary.jsx` lades till runt hela appträdet som skyddsnät — visar ett "Något gick fel"-meddelande med en återställ-knapp istället.
+
+---
+
+**Nyp-skalning på en sticker påverkade fotot istället för stickern (2026-07-23)**
+
+Symptom: när användaren nöp med två fingrar på en sticker för att ändra dess storlek hände inget med stickern — istället flyttades/skalades hundfotot bakom.
+
+Två separata orsaker, hittade i två omgångar:
+
+1. **Touch-target för liten.** `.mugshot-sticker`/`.card-sticker` hade ingen padding — träffytan var exakt lika stor som den synliga ikonen (t.ex. ~90×36px för solglasögonen). Det ena fingret i en nyp-gest hamnar ofta utanför den ytan, faller igenom `pointer-events: none`-wrappen och landar direkt på fotolagret därunder, som har sin egen oberoende drag-hook. Fix: `padding: 46px` (i linje med Apples HIG-minimum för tap-mål) på sticker-elementet, ren osynlig träffyta utan att ändra hur ikonen ser ut.
+
+2. **Strukturell bugg, bara i Studio-kortet.** Fotots drag-lyssnare (`useDraggablePhoto`s `handlers`) sattes av misstag på samma yttre `<div>` som omslöt både fotot och sticker-overlayen, istället för på ett eget syskon-element. Pekar-events på en sticker bubblar (via normal DOM-event-bubbling) upp till den gemensamma föräldern, så fotots egen drag/pinch-hook triggades parallellt med stickerns. Fix: flyttade fotot till ett eget `.blank-photo-wrap`-element, syskon till sticker-overlayen — exakt samma mönster som redan fanns i `MugshotCard.jsx` (`.mugshot-photo-wrap` och `.mugshot-sticker-wrap` som syskon under `.mugshot-backdrop`, aldrig förälder/barn).
+
+**Lärdom:** när flera dragbara lager (foto + stickers) delar samma scen måste varje lagers drag-lyssnare sitta på sitt eget element, aldrig på ett gemensamt förälder-element till de andra lagren — annars bubblar pointer-events upp och triggar flera `useDraggablePhoto`-instanser samtidigt för samma fysiska touch.

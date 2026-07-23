@@ -4,39 +4,17 @@ import { stableId } from '../../lib/hash.js'
 import { useLanguage } from '../../lib/i18n.jsx'
 import { useDraggablePhoto } from '../../lib/useDraggablePhoto.js'
 import PawIcon from './PawIcon.jsx'
-import SunglassesIcon from './SunglassesIcon.jsx'
+import CardSticker from './CardSticker.jsx'
 import './MugshotCard.css'
 
 export const DEFAULT_MUGSHOT_CAPTION = 'Guilty as charged – for being cute'
 
 const SCALE_CM = [90, 80, 70, 60, 50, 40, 30, 20, 10]
 
-const STICKER_ICONS = { sunglasses: SunglassesIcon }
-
 function formatStampDate(date = new Date()) {
   const d = String(date.getDate()).padStart(2, '0')
   const m = String(date.getMonth() + 1).padStart(2, '0')
   return `${m}-${d}-${date.getFullYear()}`
-}
-
-function MugshotSticker({ id, transform, onChange }) {
-  const Icon = STICKER_ICONS[id]
-  const drag = useDraggablePhoto({
-    x: transform.x,
-    y: transform.y,
-    scale: transform.scale,
-    onChange: (next) => onChange(id, next),
-  })
-
-  if (!Icon) return null
-
-  return (
-    <div className="mugshot-sticker-wrap">
-      <div className="mugshot-sticker" style={drag.style} {...drag.handlers}>
-        <Icon className="mugshot-sticker-icon" />
-      </div>
-    </div>
-  )
 }
 
 function MugshotCard({ dog, photoUri, onCaptionChange, onPhotoTransformChange, onStickersChange }) {
@@ -47,6 +25,7 @@ function MugshotCard({ dog, photoUri, onCaptionChange, onPhotoTransformChange, o
     x: photoTransform?.x ?? 0,
     y: photoTransform?.y ?? 0,
     scale: photoTransform?.scale ?? 1,
+    rotation: photoTransform?.rotation ?? 0,
     onChange: onPhotoTransformChange,
   })
   const stickers = dog.mugshotStickers ?? {}
@@ -105,7 +84,7 @@ function MugshotCard({ dog, photoUri, onCaptionChange, onPhotoTransformChange, o
         <div className="mugshot-timestamp">{formatStampDate()}</div>
 
         {Object.entries(stickers).map(([id, transform]) => (
-          <MugshotSticker
+          <CardSticker
             key={id}
             id={id}
             transform={transform}

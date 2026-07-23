@@ -16,6 +16,7 @@ function WantedCard({ dog, photoUri, onChargeChange, onRewardChange, onPhotoTran
     x: photoTransform?.x ?? 0,
     y: photoTransform?.y ?? 0,
     scale: photoTransform?.scale ?? 1,
+    rotation: photoTransform?.rotation ?? 0,
     onChange: onPhotoTransformChange,
   })
 
