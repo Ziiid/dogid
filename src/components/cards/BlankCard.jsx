@@ -1,6 +1,7 @@
 import { useDraggablePhoto } from '../../lib/useDraggablePhoto.js'
 import PawIcon from './PawIcon.jsx'
 import CardSticker from './CardSticker.jsx'
+import { DEFAULT_BLANK_BACKGROUND } from './blankBackgrounds.js'
 import './BlankCard.css'
 
 function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) {
@@ -13,6 +14,7 @@ function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) 
     onChange: onPhotoTransformChange,
   })
   const stickers = dog.blankStickers ?? {}
+  const background = dog.blankBackground ?? DEFAULT_BLANK_BACKGROUND
 
   function handleStickerTransformChange(id, transform) {
     onStickersChange({ ...stickers, [id]: transform })
@@ -20,7 +22,11 @@ function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) 
 
   return (
     <div className="blank-card">
-      <div className="blank-canvas">
+      <div
+        className="blank-canvas"
+        data-bg={background.type === 'color' ? 'custom' : background.id}
+        style={background.type === 'color' ? { background: background.value } : undefined}
+      >
         {/* Osynliga "mätstolpar" - samma mått som Mugshots backdrop+placard
             (aspect-ratio + kopierade padding/radhöjder), staplade i normalt
             flöde bara för att ge canvasen rätt totalhöjd. Webbläsaren

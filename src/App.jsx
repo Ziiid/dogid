@@ -49,16 +49,6 @@ function App() {
 
   return (
     <div className="app">
-      <div className="lang-row">
-        <button
-          type="button"
-          className="lang-toggle"
-          onClick={() => setLang(lang === 'sv' ? 'en' : 'sv')}
-        >
-          {lang === 'sv' ? 'EN' : 'SV'}
-        </button>
-      </div>
-
       <header className="app-header">
         <div className="brand">
           <img src={logo} alt="" className="brand-logo" />
@@ -67,6 +57,13 @@ function App() {
             <span className="brand-sona">sona</span>
           </h1>
         </div>
+        <button
+          type="button"
+          className="lang-toggle"
+          onClick={() => setLang(lang === 'sv' ? 'en' : 'sv')}
+        >
+          {lang === 'sv' ? 'EN' : 'SV'}
+        </button>
       </header>
 
       <nav className="main-tabs">

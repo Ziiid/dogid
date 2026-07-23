@@ -8,7 +8,7 @@ const STRINGS = {
   appTabCard: { sv: 'Kort', en: 'Card' },
   appSaved: { sv: 'Sparat!', en: 'Saved!' },
 
-  tplBlank: { sv: 'Studio', en: 'Studio' },
+  tplBlank: { sv: 'Creative', en: 'Creative' },
   tplMugshot: { sv: 'Mugshot', en: 'Mugshot' },
   tplWanted: { sv: 'Efterlyst', en: 'Wanted' },
   cardEmpty: {
@@ -58,6 +58,13 @@ const STRINGS = {
     en: 'Write what the dog is wanted for…',
   },
   wantedStamp: { sv: 'PÅ FRI FOT', en: 'STILL LOOSE' },
+
+  bgSectionTitle: { sv: 'Bakgrund', en: 'Background' },
+  bgWater: { sv: 'Vatten', en: 'Water' },
+  bgBeach: { sv: 'Strand', en: 'Beach' },
+  bgSnow: { sv: 'Snö', en: 'Snow' },
+  bgCity: { sv: 'City', en: 'City' },
+  bgColor: { sv: 'Färg', en: 'Color' },
 
   editableFieldsTitle: { sv: 'Editerbara fält', en: 'Editable fields' },
   wantedEditableReward: { sv: 'Belöningsbelopp', en: 'Reward amount' },

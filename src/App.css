@@ -35,13 +35,6 @@
   cursor: pointer;
 }
 
-.lang-row {
-  align-self: stretch;
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.6rem 1rem 0;
-}
-
 .lang-toggle {
   border: 1px solid #c8dfd4;
   background: #f2faf5;
@@ -54,19 +47,28 @@
 }
 
 .app-header {
-  text-align: center;
-  padding: 0.5rem 0 0.35rem;
+  align-self: stretch;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0.5rem 1rem 0.35rem;
 }
 
 .brand {
+  grid-column: 2;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
 
+.app-header .lang-toggle {
+  grid-column: 3;
+  justify-self: end;
+}
+
 .brand-logo {
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 4.5rem;
+  height: 4.5rem;
   display: block;
 }
 

@@ -13,6 +13,34 @@
   overflow: hidden;
 }
 
+.blank-canvas[data-bg='white'] {
+  background: #faf9f7;
+}
+
+.blank-canvas[data-bg='water'] {
+  background-image: url('./backgroundPhotos/water.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.blank-canvas[data-bg='beach'] {
+  background-image: url('./backgroundPhotos/beach.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.blank-canvas[data-bg='snow'] {
+  background-image: url('./backgroundPhotos/snow.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.blank-canvas[data-bg='city'] {
+  background-image: url('./backgroundPhotos/city.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
 /* Mätstolpar i normalt flöde - osynliga, avgör bara .blank-canvas höjd
    genom att återanvända Mugshots exakta mått (aspect-ratio + kopierad
    padding/radhöjd från .mugshot-placard/.mugshot-row). */

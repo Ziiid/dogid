@@ -122,6 +122,64 @@
   border-width: 2px;
 }
 
+.bg-swatch {
+  border: 1px solid #c8dfd4;
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  box-shadow: inset 0 0 0 2px #faf9f7;
+}
+
+.bg-swatch.active {
+  border-color: #6aab8a;
+  border-width: 2px;
+  box-shadow: inset 0 0 0 2px #faf9f7, 0 0 0 2px #d8ede4;
+}
+
+.bg-swatch[data-bg='water'] {
+  background-image: url('./cards/backgroundPhotos/water.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-swatch[data-bg='beach'] {
+  background-image: url('./cards/backgroundPhotos/beach.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-swatch[data-bg='snow'] {
+  background-image: url('./cards/backgroundPhotos/snow.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-swatch[data-bg='city'] {
+  background-image: url('./cards/backgroundPhotos/city.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.bg-swatch-color {
+  position: relative;
+  overflow: hidden;
+  background: conic-gradient(red, yellow, lime, cyan, blue, magenta, red);
+  display: flex;
+}
+
+.bg-swatch-color input[type='color'] {
+  position: absolute;
+  inset: -4px;
+  width: calc(100% + 8px);
+  height: calc(100% + 8px);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  opacity: 0;
+}
+
 .sticker-tray-icon {
   max-width: 100%;
   max-height: 100%;

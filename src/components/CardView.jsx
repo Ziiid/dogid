@@ -8,6 +8,7 @@ import WantedCard from './cards/WantedCard.jsx'
 import ShareIcon from './cards/ShareIcon.jsx'
 import { MUGSHOT_STICKERS, STICKER_CATEGORIES } from './cards/mugshotStickers.js'
 import { StickerGraphic } from './cards/CardSticker.jsx'
+import { BLANK_BACKGROUND_PRESETS, DEFAULT_BLANK_BACKGROUND } from './cards/blankBackgrounds.js'
 import { useLanguage } from '../lib/i18n.jsx'
 import { loadPhotoBase64 } from '../lib/dogStorage.js'
 import './CardView.css'
@@ -74,6 +75,15 @@ function CardView({ dog, photoUri, onFieldChange }) {
   }
 
   const stickerField = STICKER_FIELD_BY_TEMPLATE[template]
+  const background = dog.blankBackground ?? DEFAULT_BLANK_BACKGROUND
+
+  function handleBackgroundPreset(id) {
+    onFieldChange('blankBackground', { type: 'preset', id })
+  }
+
+  function handleBackgroundColor(value) {
+    onFieldChange('blankBackground', { type: 'color', value })
+  }
 
   function handleStickerToggle(stickerId, defaultTransform) {
     const current = dog[stickerField] ?? {}
@@ -177,6 +187,40 @@ function CardView({ dog, photoUri, onFieldChange }) {
           />
         )}
       </div>
+
+      {template === 'blank' && (
+        <div className="sticker-category">
+          <h3 className="sticker-category-label">{t('bgSectionTitle')}</h3>
+          <div className="sticker-tray">
+            {BLANK_BACKGROUND_PRESETS.map((preset) => {
+              const isActive = background.type === 'preset' && background.id === preset.id
+              return (
+                <button
+                  key={preset.id}
+                  type="button"
+                  className={isActive ? 'bg-swatch active' : 'bg-swatch'}
+                  data-bg={preset.id}
+                  onClick={() => handleBackgroundPreset(preset.id)}
+                  title={t(preset.labelKey)}
+                  aria-label={t(preset.labelKey)}
+                />
+              )
+            })}
+            <label
+              className={background.type === 'color' ? 'bg-swatch bg-swatch-color active' : 'bg-swatch bg-swatch-color'}
+              style={background.type === 'color' ? { background: background.value } : undefined}
+              title={t('bgColor')}
+            >
+              <input
+                type="color"
+                value={background.type === 'color' ? background.value : '#ffb84d'}
+                onChange={(e) => handleBackgroundColor(e.target.value)}
+                aria-label={t('bgColor')}
+              />
+            </label>
+          </div>
+        </div>
+      )}
 
       {stickerField && (
         <div className="sticker-categories">
