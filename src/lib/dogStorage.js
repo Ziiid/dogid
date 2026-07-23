@@ -4,6 +4,8 @@ import { Capacitor } from '@capacitor/core'
 
 const PROFILE_KEY = 'dogid_dog_profile'
 const PHOTO_FILENAME = 'dogid_photo.png'
+const PHOTO_ORIGINAL_FILENAME = 'dogid_photo_original.png'
+const PHOTO_NOBG_FILENAME = 'dogid_photo_nobg.png'
 const LANG_KEY = 'dogid_lang'
 
 export async function saveDogProfile(data) {
@@ -49,6 +51,42 @@ export async function loadPhotoBase64() {
   } catch {
     return null
   }
+}
+
+// Originalfotot (utan bakgrundsborttagning) och den bakgrundsborttagna
+// versionen sparas separat så användaren kan växla fram och tillbaka
+// i formuläret utan att behöva köra Vision-ramverket om varje gång.
+export async function savePhotoOriginal(base64Data) {
+  await Filesystem.writeFile({
+    path: PHOTO_ORIGINAL_FILENAME,
+    data: base64Data,
+    directory: Directory.Data,
+  })
+}
+
+export async function savePhotoNoBg(base64Data) {
+  await Filesystem.writeFile({
+    path: PHOTO_NOBG_FILENAME,
+    data: base64Data,
+    directory: Directory.Data,
+  })
+}
+
+async function readRawBase64(path) {
+  try {
+    const { data } = await Filesystem.readFile({ path, directory: Directory.Data })
+    return data
+  } catch {
+    return null
+  }
+}
+
+export function loadPhotoOriginalBase64Raw() {
+  return readRawBase64(PHOTO_ORIGINAL_FILENAME)
+}
+
+export function loadPhotoNoBgBase64Raw() {
+  return readRawBase64(PHOTO_NOBG_FILENAME)
 }
 
 export async function saveLang(lang) {

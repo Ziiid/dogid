@@ -2,11 +2,12 @@ import { useEffect, useState } from 'react'
 import { useLanguage, getDefaultWantedCharge } from '../../lib/i18n.jsx'
 import { useDraggablePhoto } from '../../lib/useDraggablePhoto.js'
 import PawIcon from './PawIcon.jsx'
+import CardSticker from './CardSticker.jsx'
 import './WantedCard.css'
 
 export const DEFAULT_WANTED_REWARD = '$ 50 000 IN GOLD COINS'
 
-function WantedCard({ dog, photoUri, onChargeChange, onRewardChange, onPhotoTransformChange }) {
+function WantedCard({ dog, photoUri, onChargeChange, onRewardChange, onPhotoTransformChange, onStickersChange }) {
   const { lang, t } = useLanguage()
   const defaultCharge = getDefaultWantedCharge(lang)
   const [charge, setCharge] = useState(dog.wantedCharge ?? defaultCharge)
@@ -19,6 +20,11 @@ function WantedCard({ dog, photoUri, onChargeChange, onRewardChange, onPhotoTran
     rotation: photoTransform?.rotation ?? 0,
     onChange: onPhotoTransformChange,
   })
+  const stickers = dog.wantedStickers ?? {}
+
+  function handleStickerTransformChange(id, transform) {
+    onStickersChange({ ...stickers, [id]: transform })
+  }
 
   useEffect(() => {
     setCharge(dog.wantedCharge ?? defaultCharge)
@@ -53,14 +59,25 @@ function WantedCard({ dog, photoUri, onChargeChange, onRewardChange, onPhotoTran
         />
         <p className="wanted-apprehension">{t('wantedApprehension')}</p>
 
-        <div className="wanted-photo-frame" {...drag.handlers}>
-          {photoUri ? (
-            <img src={photoUri} alt={dog.name} style={drag.style} />
-          ) : (
-            <div className="wanted-photo-placeholder">
-              <PawIcon className="wanted-photo-placeholder-icon" />
-            </div>
-          )}
+        <div className="wanted-photo-frame">
+          <div className="wanted-photo-wrap" {...drag.handlers}>
+            {photoUri ? (
+              <img src={photoUri} alt={dog.name} style={drag.style} />
+            ) : (
+              <div className="wanted-photo-placeholder">
+                <PawIcon className="wanted-photo-placeholder-icon" />
+              </div>
+            )}
+          </div>
+
+          {Object.entries(stickers).map(([id, transform]) => (
+            <CardSticker
+              key={id}
+              id={id}
+              transform={transform}
+              onChange={handleStickerTransformChange}
+            />
+          ))}
         </div>
 
         <h1 className="wanted-name">{dog.name}</h1>

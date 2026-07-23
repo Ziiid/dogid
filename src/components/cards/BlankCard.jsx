@@ -40,6 +40,28 @@ function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) 
           />
         ))}
       </div>
+
+      {/* Osynlig footer, samma mått som Mugshots placard (padding/radhöjder
+          kopierade rakt av) - inte för att visa något, bara för att Studio-
+          kortets totalhöjd ska matcha Mugshot/Wanted istället för att gissa
+          fram ett aspect-ratio-tal. */}
+      <div className="blank-footer" aria-hidden="true">
+        <div className="blank-footer-row blank-footer-row--head">
+          <span>#</span>
+          <span>#</span>
+        </div>
+        <div className="blank-footer-row blank-footer-row--id">
+          <span className="blank-footer-value">#</span>
+        </div>
+        <div className="blank-footer-row blank-footer-row--split">
+          <span>#</span>
+          <span>#</span>
+        </div>
+        <div className="blank-footer-row blank-footer-row--charge">
+          <span>#</span>
+          <textarea className="blank-footer-charge" value="" readOnly rows={2} tabIndex={-1} />
+        </div>
+      </div>
     </div>
   )
 }

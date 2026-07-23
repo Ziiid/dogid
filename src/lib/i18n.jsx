@@ -22,10 +22,8 @@ const STRINGS = {
   },
   photoProcessing: { sv: 'Tar bort bakgrund…', en: 'Removing background…' },
   photoAdd: { sv: 'Lägg till foto', en: 'Add photo' },
-  photoDragHint: {
-    sv: 'Dra bilden för att flytta den i ringen',
-    en: 'Drag the photo to reposition it in the ring',
-  },
+  removeBgButton: { sv: 'Ta bort bakgrund', en: 'Remove background' },
+  restoreBgButton: { sv: 'Återställ bakgrund', en: 'Restore background' },
   labelName: { sv: 'Namn', en: 'Name' },
   labelBreed: { sv: 'Ras', en: 'Breed' },
   labelBirthDate: { sv: 'Födelsedatum', en: 'Date of birth' },

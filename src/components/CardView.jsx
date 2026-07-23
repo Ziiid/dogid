@@ -14,7 +14,7 @@ import './CardView.css'
 
 const SHARE_FILENAME = 'dogsona-share.png'
 
-const STICKER_FIELD_BY_TEMPLATE = { blank: 'blankStickers', mugshot: 'mugshotStickers' }
+const STICKER_FIELD_BY_TEMPLATE = { blank: 'blankStickers', mugshot: 'mugshotStickers', wanted: 'wantedStickers' }
 
 const FORMATS = [
   { id: 'original', labelKey: 'formatOriginal' },
@@ -173,6 +173,7 @@ function CardView({ dog, photoUri, onFieldChange }) {
             onChargeChange={(value) => onFieldChange('wantedCharge', value)}
             onRewardChange={(value) => onFieldChange('wantedReward', value)}
             onPhotoTransformChange={(value) => onFieldChange('wantedPhotoTransform', value)}
+            onStickersChange={(value) => onFieldChange('wantedStickers', value)}
           />
         )}
       </div>

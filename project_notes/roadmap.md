@@ -1,11 +1,14 @@
 # Roadmap
 
-## Nästa steg (fortsätter 2026-07-23)
+## Nästa steg (fortsätter 2026-07-24)
 
-Se decisions.md ("Tredje kortet, sticker-utbyggnad och kodstädning") för dagens produktramning: appen är en generator för att skapa roliga hundbilder på egen hand, tre kort — Studio/Mugshot/Wanted.
+Se decisions.md ("Tredje kortet, sticker-utbyggnad och kodstädning" 2026-07-23, "Fler sticker-omgångar, bakgrunds-toggle och kortstorlekar" 2026-07-24) för produktramningen: appen är en generator för att skapa roliga hundbilder på egen hand, tre kort — Studio/Mugshot/Wanted.
+
+**Öppen fråga, inget beslutat: bort med den bluradade bakgrunden i delningsformaten?**
+Post/Story/Bakgrund lägger idag en blurad uppskalad kopia av kortet bakom det skarpa originalet (`composeForFormat`, `CardView.jsx`). Användaren tyckte det blev fult ("samma bild inuti bilden") men valde inte ersättning innan sessionen gick vidare. Två alternativ diskuterade: solid bakgrundsfärg (kortet centrerat, syns helt men får kant) eller beskär-för-att-fylla (kortet skalas upp för att fylla hela ytan kant till kant, inga kanter men delar av kortet kan klippas bort). Fråga användaren igen innan implementation.
 
 **Stickers, återstår:**
-- Fler stickers från ChatGPT (4 kasserade pga felstavad inbränd text väntar på nya versioner — se decisions.md)
+- Fler stickers från ChatGPT — be uttryckligen om rena bilder utan vit "die-cut"-kant/skugga (se decisions.md 2026-07-24)
 - Ev. fler kategorier när stickerantalet växer
 
 **Fas 2 — Mugshot, återstår:**
@@ -45,3 +48,9 @@ Se decisions.md ("Tredje kortet, sticker-utbyggnad och kodstädning") för dagen
 - **Tray visar sticker-bilden istället för textetikett** (2026-07-23)
 - **20 nya PNG-stickers importerade från ett ChatGPT-genererat sticker-sheet**, beskurna med eget connected-component-Python-skript (2026-07-23, se decisions.md + bugs.md)
 - Fixade två nyp-skalningsbuggar på stickers (för liten touch-yta, strukturell drag-bubbling-bugg i Studio-kortet) (2026-07-23, se bugs.md)
+- **46 fler stickers importerade** från fem sticker-sheets (hatts1/hatts2/emoji1/coffee/stickers3) — 86 stickers totalt, inklusive lösning för bilder utan äkta alfakanal (2026-07-24, se decisions.md)
+- **Alla handritade SVG-stickers borttagna**, ersatta av riktiga bildstickers (sombrero/heart/speechBubble återanvänder samma sticker-id) (2026-07-24)
+- **Bakgrundsborttagning: riktig fram-och-tillbaka-växel** (original + bakgrundsborttagen version cachas separat, ingen omprocessering vid växling) (2026-07-24, se decisions.md)
+- **Formulärets meningslösa drag-i-cirkel-positionering borttagen**, fotoförhandsvisning bytt till rundad fyrkant med `object-fit: contain` (2026-07-24)
+- **Wanted fick sticker-stöd** (saknades helt tidigare) och mycket större fotoyta (68%→92% bredd, kvadrat→4:5) (2026-07-24)
+- **Studio-kortets totalhöjd matchar nu Mugshot/Wanted korrekt** via en osynlig footer som återanvänder Mugshot-placardens exakta CSS-mått, istället för ett gissat aspect-ratio-tal (2026-07-24, se decisions.md för lärdomen)
