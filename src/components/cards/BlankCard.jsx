@@ -20,7 +20,32 @@ function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) 
 
   return (
     <div className="blank-card">
-      <div className="blank-frame">
+      <div className="blank-canvas">
+        {/* Osynliga "mätstolpar" - samma mått som Mugshots backdrop+placard
+            (aspect-ratio + kopierade padding/radhöjder), staplade i normalt
+            flöde bara för att ge canvasen rätt totalhöjd. Webbläsaren
+            summerar höjden åt oss, ingen gissad siffra. Det interaktiva
+            lagret (foto + stickers) ligger absolut positionerat ovanpå och
+            täcker HELA den summerade ytan - det är den faktiska lekytan. */}
+        <div className="blank-size-backdrop" aria-hidden="true" />
+        <div className="blank-size-footer" aria-hidden="true">
+          <div className="blank-size-row blank-size-row--head">
+            <span>#</span>
+            <span>#</span>
+          </div>
+          <div className="blank-size-row blank-size-row--id">
+            <span className="blank-size-value">#</span>
+          </div>
+          <div className="blank-size-row blank-size-row--split">
+            <span>#</span>
+            <span>#</span>
+          </div>
+          <div className="blank-size-row blank-size-row--charge">
+            <span>#</span>
+            <textarea className="blank-size-charge" value="" readOnly rows={2} tabIndex={-1} />
+          </div>
+        </div>
+
         <div className="blank-photo-wrap" {...drag.handlers}>
           {photoUri ? (
             <img className="blank-photo" src={photoUri} alt={dog.name} style={drag.style} />
@@ -39,28 +64,6 @@ function BlankCard({ dog, photoUri, onPhotoTransformChange, onStickersChange }) 
             onChange={handleStickerTransformChange}
           />
         ))}
-      </div>
-
-      {/* Osynlig footer, samma mått som Mugshots placard (padding/radhöjder
-          kopierade rakt av) - inte för att visa något, bara för att Studio-
-          kortets totalhöjd ska matcha Mugshot/Wanted istället för att gissa
-          fram ett aspect-ratio-tal. */}
-      <div className="blank-footer" aria-hidden="true">
-        <div className="blank-footer-row blank-footer-row--head">
-          <span>#</span>
-          <span>#</span>
-        </div>
-        <div className="blank-footer-row blank-footer-row--id">
-          <span className="blank-footer-value">#</span>
-        </div>
-        <div className="blank-footer-row blank-footer-row--split">
-          <span>#</span>
-          <span>#</span>
-        </div>
-        <div className="blank-footer-row blank-footer-row--charge">
-          <span>#</span>
-          <textarea className="blank-footer-charge" value="" readOnly rows={2} tabIndex={-1} />
-        </div>
       </div>
     </div>
   )

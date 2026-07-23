@@ -159,6 +159,10 @@ Fix krävde nativ kod, inte CSS: `CAPBridgeViewController.loadView()` är `final
 
 **Övervägd men ej implementerad: ta bort den bluradade bakgrunden i delningsformaten.** Post/Story/Bakgrund komponerar just nu en blurad uppskalad kopia av kortet som bakgrund bakom det skarpa originalet (`composeForFormat`, se tidigare post). Användaren tyckte detta blev fult ("samma bild inuti bilden") och ville ta bort det, men hann inte välja ersättning (solid bakgrundsfärg vs. beskär-för-att-fylla) innan sessionen gick vidare till andra saker. **Öppen fråga, inget beslutat än** — se roadmap.md.
 
+## Kort-vyn kör nu full bredd (2026-07-24)
+
+**Tog bort `zoom: 0.78` på `.template-stage`** (CardView.css) — en kvarleva från 2026-07-21 då sex kortmallar skulle samsas om skärmen och allt skalades ner för att få plats. Sedan scope-skiftet till tre kort fanns inget kvar som motiverade nedskalningen; den skapade bara en osynlig marginal runt hela kortet inuti sin egen full-bredd-container. Samtidigt togs hårdkodade `max-width: 340px/320px/300px`-tak bort på flikrader, sticker-kategorier, sticker-tray, format-flikar och avdelaren (bytta till `width: 100%`) — de var smalare än en modern iPhone-skärm oavsett faktisk bredd. Kortets egen bredd (`min(92vw, 380px)`) är oförändrad, det är en avsiktlig kortmarginal, inte samma sak som buggen. Studio-kortets interaktiva canvas byggdes också om samtidigt så att hela den extra höjden (för att matcha Mugshot/Wanted) faktiskt är lekyta för stickers/drag/pinch, inte bara en osynlig spacer som fick totalhöjden att stämma utan att vara klickbar.
+
 ## Bygg-/synk-flöde (Capacitor)
 
 **`npx vite build` uppdaterar bara `dist/`, inte det Xcode faktiskt bygger**
