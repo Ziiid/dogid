@@ -67,6 +67,24 @@ import heart from './stickerAssets/heart.png'
 import poopEmoji from './stickerAssets/poopEmoji.png'
 import coffeeMug from './stickerAssets/coffeeMug.png'
 import matchaCup from './stickerAssets/matchaCup.png'
+import sunglassesBlack from './stickerAssets/sunglassesBlack.png'
+import sunglassesAviator from './stickerAssets/sunglassesAviator.png'
+import magicWand from './stickerAssets/magicWand.png'
+import speechBubble from './stickerAssets/speechBubble.png'
+import zzzSleep from './stickerAssets/zzzSleep.png'
+import cashMoney from './stickerAssets/cashMoney.png'
+import peePuddle from './stickerAssets/peePuddle.png'
+import dogBowl from './stickerAssets/dogBowl.png'
+import beerMug from './stickerAssets/beerMug.png'
+import sodaCan from './stickerAssets/sodaCan.png'
+import cocktail from './stickerAssets/cocktail.png'
+import wineGlass from './stickerAssets/wineGlass.png'
+import beachUmbrella from './stickerAssets/beachUmbrella.png'
+import sunSticker from './stickerAssets/sunSticker.png'
+import palmTreeIsland from './stickerAssets/palmTreeIsland.png'
+import vacationSign from './stickerAssets/vacationSign.png'
+import holidaySign from './stickerAssets/holidaySign.png'
+import keepOutSign from './stickerAssets/keepOutSign.png'
 import './CardSticker.css'
 
 // Värdet är en bildsökväg (string) till en PNG-sticker - StickerGraphic
@@ -140,6 +158,24 @@ export const STICKER_ICONS = {
   poopEmoji,
   coffeeMug,
   matchaCup,
+  sunglassesBlack,
+  sunglassesAviator,
+  magicWand,
+  speechBubble,
+  zzzSleep,
+  cashMoney,
+  peePuddle,
+  dogBowl,
+  beerMug,
+  sodaCan,
+  cocktail,
+  wineGlass,
+  beachUmbrella,
+  sunSticker,
+  palmTreeIsland,
+  vacationSign,
+  holidaySign,
+  keepOutSign,
 }
 
 export function StickerGraphic({ id, className }) {
